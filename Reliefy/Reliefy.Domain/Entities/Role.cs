@@ -2,6 +2,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Reliefy.Domain.Entities;
 
-public class Role : IdentityRole
+public class Role : IdentityRole<Guid>
 {
 }
