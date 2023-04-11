@@ -3,13 +3,13 @@ import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../utils/pages.dart';
+import '../utils/routes.dart';
 
 class FireAuthController extends GetxController {
   initialState() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
-        Get.off(Page.login);
+        Get.offAllNamed(PageRoutes.login);
       }
     });
   }
@@ -52,9 +52,29 @@ class FireAuthController extends GetxController {
       user = result.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
-        throw ArgumentError.value("Invalid credential.");
+        throw ArgumentError.value("Account already exist.");
       } else if (e.code == 'invalid-credential') {
         throw ArgumentError.value("Invalid credential.");
+      }
+    }
+    return user;
+  }
+
+  Future<User?> signUp({required String email, required String password}) async {
+    User? user;
+    try {
+      final result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      user = result.user;
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "weak-password":
+          throw ArgumentError.value("Weak password.");
+        case "email-already-in-use":
+          throw ArgumentError.value("Email already in use.");
+        case "invalid-email":
+          throw ArgumentError.value("Invalid Email.");
+        default:
+          throw ArgumentError.value('Invalid credential.');
       }
     }
     return user;

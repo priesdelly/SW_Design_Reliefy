@@ -9,12 +9,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    authController.initialState();
     return Scaffold(
       body: Center(
           child: TextButton(
         onPressed: () async => await authController.signOut(),
-        child: Text("Signout"),
+        child: const Text("Signout"),
       )),
     );
   }
