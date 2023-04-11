@@ -1,66 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/instance_manager.dart';
-import 'package:mobile/utils/alert.dart';
-import 'package:mobile/utils/color.dart';
-import 'package:mobile/utils/routes.dart';
+import 'package:get/route_manager.dart';
+import 'package:mobile/controllers/fireauth_controller.dart';
+
 import '../components/password_input.dart';
 import '../components/textbox_input.dart';
-import '../controllers/fireauth_controller.dart';
+import '../utils/alert.dart';
 import '../utils/loader.dart';
+import '../utils/routes.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final FireAuthController authController = Get.find();
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  final FireAuthController authController = Get.find();
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   String? validateEmpty(String? value) {
     return (value != null && value.isEmpty) ? '' : null;
   }
 
-  void onLogin() async {
+  void onRegister() async {
+    if (passwordController.text.trim() != confirmPasswordController.text.trim()) {
+      Alert.show(context: context, title: "Password and Confirm password not match");
+      return;
+    }
     if (_formKey.currentState!.validate()) {
       try {
         Loader.show();
-        await authController.signInUsingEmailPassword(email: emailController.text, password: passwordController.text);
+        await authController.signUp(email: emailController.text, password: passwordController.text);
         Get.offAllNamed(PageRoutes.home);
       } on ArgumentError catch (e) {
         Alert.show(context: context, title: e.invalidValue);
       } finally {
-        Loader.hide();
+        if (context.mounted) {
+          Loader.hide();
+        }
       }
     }
-  }
-
-  void onGoogleLogin() async {
-    try {
-      Loader.show();
-      await authController.signInWithGoogle();
-      Get.offAllNamed(PageRoutes.home);
-    } on ArgumentError catch (e) {
-      Alert.show(context: context, title: e.invalidValue);
-    } finally {
-      if (context.mounted) {
-        Loader.hide();
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
   }
 
   @override
@@ -74,8 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(alignment: Alignment.center, child: SvgPicture.asset("assets/images/loving.svg", height: 200)),
-                const Text("Login",
+                Align(alignment: Alignment.center, child: SvgPicture.asset("assets/images/sprinting.svg", height: 200)),
+                const Text("Register",
                     style: TextStyle(
                       fontSize: 50,
                       fontWeight: FontWeight.bold,
@@ -101,6 +87,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: validateEmpty,
                       ),
                       const SizedBox(
+                        height: 15,
+                      ),
+                      PasswordInput(
+                        controller: confirmPasswordController,
+                        hintText: "Confirm Password",
+                        validator: validateEmpty,
+                      ),
+                      const SizedBox(
                         height: 24,
                       ),
                       Container(
@@ -116,39 +110,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               (_) => Colors.transparent,
                             ),
                           ),
-                          onPressed: onLogin,
+                          onPressed: onRegister,
                           child: const Text(
-                            "Login",
+                            "Register",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
-                      ),
-                      const Padding(padding: EdgeInsets.all(20), child: Text("OR")),
-                      Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: kPowderBlueColor,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: TextButton(
-                            style: ButtonStyle(
-                              overlayColor: MaterialStateColor.resolveWith(
-                                (_) => Colors.transparent,
-                              ),
-                            ),
-                            onPressed: onGoogleLogin,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset("assets/images/google.png"),
-                                const SizedBox(width: 25),
-                                const Text(
-                                  "Login with Google",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            )),
                       ),
                       const SizedBox(
                         height: 24,
@@ -160,9 +127,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Text(
-                              "New to Reliefy?",
+                              "Already joined Reliefy?",
                             ),
-                            TextButton(onPressed: () => Get.offNamed(PageRoutes.register), child: const Text("Register"))
+                            TextButton(
+                              onPressed: () => Get.offNamed(PageRoutes.login),
+                              style: ElevatedButton.styleFrom(
+                                splashFactory: NoSplash.splashFactory,
+                              ),
+                              child: const Text("Login"),
+                            )
                           ],
                         ),
                       )
