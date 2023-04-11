@@ -15,4 +15,35 @@
       <ProjectReference Include="..\Reliefy.Infrastructure\Reliefy.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="mobile\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="mobile\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="mobile\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="mobile\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="mobile\build\flutter_assets\AssetManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\flutter_assets\FontManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\Debug-iphonesimulator\App.framework\flutter_assets\AssetManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\Debug-iphonesimulator\App.framework\flutter_assets\FontManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\Debug-iphonesimulator\Runner.app\Frameworks\App.framework\flutter_assets\AssetManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\Debug-iphonesimulator\Runner.app\Frameworks\App.framework\flutter_assets\FontManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\Debug-iphonesimulator\Runner.swiftmodule\x86_64-apple-ios-simulator.abi.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\iphonesimulator\Runner.app\Frameworks\App.framework\flutter_assets\AssetManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\iphonesimulator\Runner.app\Frameworks\App.framework\flutter_assets\FontManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\ios\Runner\Assets.xcassets\AppIcon.appiconset\Contents.json" />
+      <_ContentIncludedByDefault Remove="mobile\ios\Runner\Assets.xcassets\LaunchImage.imageset\Contents.json" />
+      <_ContentIncludedByDefault Remove="mobile\web\manifest.json" />
+    </ItemGroup>
+
 </Project>
