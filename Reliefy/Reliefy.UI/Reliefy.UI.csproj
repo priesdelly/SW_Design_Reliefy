@@ -4,22 +4,46 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>aspnet-Reliefy.UI-6F7B279E-C6CB-43B3-B0A9-D7E0C0B6F63E</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.4" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.4" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.4" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.4" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.4" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.4" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Reliefy.Application\Reliefy.Application.csproj" />
       <ProjectReference Include="..\Reliefy.Infrastructure\Reliefy.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="mobile\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="mobile\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="mobile\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="mobile\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="mobile\build\flutter_assets\AssetManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\flutter_assets\FontManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\Debug-iphonesimulator\App.framework\flutter_assets\AssetManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\Debug-iphonesimulator\App.framework\flutter_assets\FontManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\Debug-iphonesimulator\Runner.app\Frameworks\App.framework\flutter_assets\AssetManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\Debug-iphonesimulator\Runner.app\Frameworks\App.framework\flutter_assets\FontManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\Debug-iphonesimulator\Runner.swiftmodule\x86_64-apple-ios-simulator.abi.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\iphonesimulator\Runner.app\Frameworks\App.framework\flutter_assets\AssetManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\build\ios\iphonesimulator\Runner.app\Frameworks\App.framework\flutter_assets\FontManifest.json" />
+      <_ContentIncludedByDefault Remove="mobile\ios\Runner\Assets.xcassets\AppIcon.appiconset\Contents.json" />
+      <_ContentIncludedByDefault Remove="mobile\ios\Runner\Assets.xcassets\LaunchImage.imageset\Contents.json" />
+      <_ContentIncludedByDefault Remove="mobile\web\manifest.json" />
     </ItemGroup>
 
 </Project>

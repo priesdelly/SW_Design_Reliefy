@@ -1,50 +1,43 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Reliefy.Application.Interfaces;
-using Reliefy.Domain.Entities;
+using Microsoft.IdentityModel.Tokens;
 using Reliefy.Infrastructure.Persistence;
 
 namespace Reliefy.Infrastructure;
 
 public static class ConfigureServices
 {
-	public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
-		IConfiguration configuration)
+	public static IServiceCollection AddDatabaseService(this IServiceCollection services, IConfiguration configuration)
 	{
-		services.AddDbContext<ApplicationDbContext>(option =>
+		services.AddDbContext<ApplicationDbContext>(options =>
 		{
-			option.UseNpgsql(configuration.GetConnectionString("ReliefyDB"),
+			options.UseNpgsql(configuration.GetConnectionString("ReliefyDB"),
 				builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
 		});
-
-		services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-
+		
 		return services;
 	}
-
-	public static IServiceCollection AddIdentityService(this IServiceCollection services, IConfiguration configuration)
+	
+	public static IServiceCollection AddFirebaseAuthService(this IServiceCollection services, IConfiguration configuration)
 	{
-		services.AddDefaultIdentity<User>()
-			.AddRoles<Role>()
-			.AddRoleManager<RoleManager<Role>>()
-			.AddSignInManager<SignInManager<User>>()
-			.AddRoleValidator<RoleValidator<Role>>()
-			.AddEntityFrameworkStores<ApplicationDbContext>();
-
-		services.AddAuthentication()
-			.AddCookie(options =>
+		// firebase auth
+		services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+			.AddJwtBearer(opt =>
 			{
-				options.LoginPath = "/Account/Unauthorized/";
-				options.AccessDeniedPath = "/Account/Forbidden/";
-			})
-			.AddGoogle(options =>
-			{
-				IConfigurationSection googleAuthNSection = configuration.GetSection("Authentication:Google");
-				options.ClientId = googleAuthNSection["ClientId"]!;
-				options.ClientSecret = googleAuthNSection["ClientSecret"]!;
+				opt.Authority = configuration["Jwt:Firebase:ValidIssuer"];
+				opt.TokenValidationParameters = new TokenValidationParameters
+				{
+					ValidateIssuer = true,
+					ValidateAudience = true,
+					ValidateLifetime = true,
+					ValidateIssuerSigningKey = true,
+					ValidIssuer = configuration["Jwt:Firebase:ValidIssuer"],
+					ValidAudience = configuration["Jwt:Firebase:ValidAudience"]
+				};
 			});
+
 		return services;
 	}
 }

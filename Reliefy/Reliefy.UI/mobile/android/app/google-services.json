@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "310126194761",
+    "project_id": "reliefy-2023",
+    "storage_bucket": "reliefy-2023.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310126194761:android:447414d9527c626cd60f98",
+        "android_client_info": {
+          "package_name": "com.sechula.reliefy.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310126194761-uibu8vqhjoep8m5re9g1fd8lmqkaffgt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2-BOtsgMJhPBJS2EYzpCzAajYetfv_ZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310126194761-lpen5u7mh0iek4i0mjitv63pvb8msk1f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
