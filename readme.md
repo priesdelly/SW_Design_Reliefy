@@ -2,7 +2,8 @@
 
 Appointment system
 
-## Installation
+## Backend
+### Installation
 
 .Net 7
 
@@ -14,4 +15,14 @@ dotnet ef migrations add <<MigrationName>> --project Reliefy.Infrastructure --st
 Update database
 ```bash
 dotnet ef database update --project Reliefy.Infrastructure --startup-project Reliefy.UI
+```
+
+## Mobile
+### Installation
+
+Flutter version 3
+
+Run this command after add model
+```
+flutter pub run build_runner build
 ```
