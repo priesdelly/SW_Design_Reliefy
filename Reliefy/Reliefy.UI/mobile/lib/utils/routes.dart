@@ -1,5 +1,5 @@
 import 'package:get/route_manager.dart';
-import 'package:mobile/screens/home_screen.dart';
+import 'package:mobile/screens/_layout.dart';
 import 'package:mobile/screens/login_screen.dart';
 import '../screens/register.screen.dart';
 
@@ -12,7 +12,7 @@ class PageRoutes {
 final pages = [
   GetPage(
     name: PageRoutes.home,
-    page: () => HomeScreen(),
+    page: () => const LayoutScreen(),
     transition: Transition.fadeIn,
     transitionDuration: const Duration(milliseconds: 500),
   ),

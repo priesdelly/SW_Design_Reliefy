@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/instance_manager.dart';
+import 'package:mobile/components/button.dart';
 import 'package:mobile/utils/alert.dart';
-import 'package:mobile/utils/color.dart';
+import 'package:mobile/utils/constant.dart';
 import 'package:mobile/utils/routes.dart';
 import '../components/password_input.dart';
 import '../components/textbox_input.dart';
@@ -29,13 +30,16 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onLogin() async {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      Alert.show(title: "Please fill email and password");
+    }
     if (_formKey.currentState!.validate()) {
       try {
         Loader.show();
         await authController.signInUsingEmailPassword(email: emailController.text, password: passwordController.text);
         Get.offAllNamed(PageRoutes.home);
       } on ArgumentError catch (e) {
-        Alert.show(context: context, title: e.invalidValue);
+        Alert.show(title: e.invalidValue);
       } finally {
         Loader.hide();
       }
@@ -48,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await authController.signInWithGoogle();
       Get.offAllNamed(PageRoutes.home);
     } on ArgumentError catch (e) {
-      Alert.show(context: context, title: e.invalidValue);
+      Alert.show(title: e.invalidValue);
     } finally {
       if (context.mounted) {
         Loader.hide();
@@ -103,53 +107,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 24,
                       ),
-                      Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: TextButton(
-                          style: ButtonStyle(
-                            overlayColor: MaterialStateColor.resolveWith(
-                              (_) => Colors.transparent,
-                            ),
-                          ),
-                          onPressed: onLogin,
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
+                      Button(label: "Login", onPressed: onLogin),
                       const Padding(padding: EdgeInsets.all(20), child: Text("OR")),
-                      Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: kPowderBlueColor,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: TextButton(
-                            style: ButtonStyle(
-                              overlayColor: MaterialStateColor.resolveWith(
-                                (_) => Colors.transparent,
+                      Button(
+                          backgroundColor: kPowderBlueColor,
+                          onPressed: onGoogleLogin,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset("assets/images/google.png"),
+                              const Text(
+                                "Login with Google",
+                                style: TextStyle(color: Colors.black),
                               ),
-                            ),
-                            onPressed: onGoogleLogin,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset("assets/images/google.png"),
-                                const SizedBox(width: 25),
-                                const Text(
-                                  "Login with Google",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            )),
-                      ),
+                              const SizedBox()
+                            ],
+                          )),
                       const SizedBox(
                         height: 24,
                       ),

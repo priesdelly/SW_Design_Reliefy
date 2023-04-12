@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Alert {
-  static Future show({required BuildContext context, required String title, String? content}) {
+  static Future show({required String title, String? content}) {
+    final context = Get.key.currentContext;
+    if (context == null) return Future(() => null);
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(

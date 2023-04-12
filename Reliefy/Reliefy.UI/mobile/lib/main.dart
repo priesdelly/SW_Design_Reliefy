@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/controllers/fireauth_controller.dart';
-import 'package:mobile/screens/home_screen.dart';
+import 'package:mobile/screens/_layout.dart';
 import 'package:mobile/screens/login_screen.dart';
 import 'package:mobile/utils/routes.dart';
 import 'package:mobile/utils/palette.dart';
@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
       title: 'Reliefy',
       theme: ThemeData(
         primarySwatch: Palette.kMainTheme,
+        fontFamily: "IBMPlexSansThai",
       ),
       navigatorKey: Get.key,
       home: GestureDetector(
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
           future: _initialFirebase(),
           builder: (_, snapshot) {
             if (snapshot.hasData) {
-              return HomeScreen();
+              return const LayoutScreen();
             } else if (!snapshot.hasData) {
               return const LoginScreen();
             } else {

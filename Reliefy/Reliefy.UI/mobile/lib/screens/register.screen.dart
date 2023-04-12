@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:mobile/controllers/fireauth_controller.dart';
-
 import '../components/password_input.dart';
 import '../components/textbox_input.dart';
 import '../utils/alert.dart';
@@ -31,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void onRegister() async {
     if (passwordController.text.trim() != confirmPasswordController.text.trim()) {
-      Alert.show(context: context, title: "Password and Confirm password not match");
+      Alert.show(title: "Password and Confirm password not match");
       return;
     }
     if (_formKey.currentState!.validate()) {
@@ -40,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         await authController.signUp(email: emailController.text, password: passwordController.text);
         Get.offAllNamed(PageRoutes.home);
       } on ArgumentError catch (e) {
-        Alert.show(context: context, title: e.invalidValue);
+        Alert.show(title: e.invalidValue);
       } finally {
         if (context.mounted) {
           Loader.hide();
