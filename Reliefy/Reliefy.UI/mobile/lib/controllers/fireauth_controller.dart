@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/route_manager.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:mobile/controllers/user_controller.dart';
 import '../utils/routes.dart';
 
 class FireAuthController extends GetxController {
+  final UserController userController = Get.find();
+
   initialState() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
@@ -48,8 +49,8 @@ class FireAuthController extends GetxController {
 
       // Once signed in, return the UserCredential
       final result = await FirebaseAuth.instance.signInWithCredential(credential);
-
       user = result.user;
+      await userController.createUser(uid: user!.uid, email: user.email!, signInType: credential.signInMethod);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         throw ArgumentError.value("Account already exist.");
@@ -65,6 +66,7 @@ class FireAuthController extends GetxController {
     try {
       final result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
       user = result.user;
+      await userController.createUser(uid: user!.uid, email: user.email!, signInType: result.credential!.signInMethod);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "weak-password":

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Reliefy.Application.Interfaces;
 using Reliefy.Infrastructure.Persistence;
 
 namespace Reliefy.Infrastructure;
@@ -17,11 +20,19 @@ public static class ConfigureServices
 				builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
 		});
 		
+		AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+		services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 		return services;
 	}
 	
 	public static IServiceCollection AddFirebaseAuthService(this IServiceCollection services, IConfiguration configuration)
 	{
+		// Ref from https://dev.to/ossan/firebase-authentication-net-5-29oi
+		FirebaseApp.Create(new AppOptions()
+		{
+			Credential = GoogleCredential.FromFile(configuration["Secrets:FirebasePath"]),
+		});
+		
 		// firebase auth
 		services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			.AddJwtBearer(opt =>

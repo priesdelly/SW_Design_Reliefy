@@ -3,10 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/controllers/fireauth_controller.dart';
+import 'package:mobile/providers/http_provider.dart';
 import 'package:mobile/screens/_layout.dart';
 import 'package:mobile/screens/login_screen.dart';
 import 'package:mobile/utils/routes.dart';
 import 'package:mobile/utils/palette.dart';
+import 'controllers/user_controller.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -14,22 +16,21 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
-  final authController = Get.put(FireAuthController());
-
-  Future<User?> _initialFirebase() async {
+  Future<User?> _initial() async {
+    final FireAuthController authController = Get.find();
+    authController.initialState();
     User? user = FirebaseAuth.instance.currentUser;
     return user;
   }
 
   @override
   Widget build(BuildContext context) {
-    authController.initialState();
     return GetMaterialApp(
       initialRoute: PageRoutes.home,
       getPages: pages,
@@ -39,10 +40,11 @@ class MyApp extends StatelessWidget {
         fontFamily: "IBMPlexSansThai",
       ),
       navigatorKey: Get.key,
+      initialBinding: Bind(),
       home: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: FutureBuilder(
-          future: _initialFirebase(),
+          future: _initial(),
           builder: (_, snapshot) {
             if (snapshot.hasData) {
               return const LayoutScreen();
@@ -58,4 +60,14 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+class Bind extends Bindings {
+  Bind() {
+    Get.lazyPut(() => HttpProvider());
+    Get.lazyPut(() => FireAuthController());
+    Get.lazyPut(() => UserController());
+  }
+  @override
+  void dependencies() {}
 }

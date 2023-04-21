@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/instance_manager.dart';
 import 'package:mobile/components/appointment_item.dart';
+import 'package:mobile/controllers/user_controller.dart';
 import 'package:mobile/utils/constant.dart';
 
 class AppointmentScreen extends StatefulWidget {
@@ -11,6 +13,15 @@ class AppointmentScreen extends StatefulWidget {
 }
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
+  final UserController userProvider = Get.find();
+
+  @override
+  void initState() {
+    userProvider.testGet();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(

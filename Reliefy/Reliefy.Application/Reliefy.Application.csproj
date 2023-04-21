@@ -3,11 +3,20 @@
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <Nullable>disable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Interfaces" />
+      <ProjectReference Include="..\Reliefy.Domain\Reliefy.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Mapster" Version="7.3.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="BL\" />
     </ItemGroup>
 
 </Project>
