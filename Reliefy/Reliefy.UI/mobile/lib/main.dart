@@ -8,7 +8,7 @@ import 'package:mobile/screens/_layout.dart';
 import 'package:mobile/screens/login_screen.dart';
 import 'package:mobile/utils/routes.dart';
 import 'package:mobile/utils/palette.dart';
-import 'controllers/user_controller.dart';
+import 'providers/user_provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -66,7 +66,7 @@ class Bind extends Bindings {
   Bind() {
     Get.lazyPut(() => HttpProvider());
     Get.lazyPut(() => FireAuthController());
-    Get.lazyPut(() => UserController());
+    Get.lazyPut(() => UserProvider());
   }
   @override
   void dependencies() {}

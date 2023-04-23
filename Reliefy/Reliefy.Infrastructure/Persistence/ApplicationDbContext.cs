@@ -1,13 +1,19 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Reliefy.Application.Interfaces;
 using Reliefy.Domain.Entities;
+using Reliefy.Infrastructure.Persistence.Interceptors;
 
 namespace Reliefy.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+	private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
+
+	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
+		AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
 	{
+		_auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
 	}
 
 	public DbSet<User> Users => Set<User>();
@@ -15,4 +21,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 	public DbSet<UserRole> UserRoles => Set<UserRole>();
 	public DbSet<Appointment> Appointments => Set<Appointment>();
 	public DbSet<AvailableTime> AvailableTime => Set<AvailableTime>();
+
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+	}
 }

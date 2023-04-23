@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Reliefy.Domain.Entities;
 
@@ -19,6 +20,8 @@ public interface IApplicationDbContext
 	
 	Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 	
+	public DatabaseFacade Database { get; }
+	
 	internal const DynamicallyAccessedMemberTypes DynamicallyAccessedMemberTypes =
 		System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicConstructors
 		| System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.NonPublicConstructors
@@ -27,4 +30,6 @@ public interface IApplicationDbContext
 		| System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.NonPublicProperties
 		| System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.NonPublicFields
 		| System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.Interfaces;
+
+	void Dispose();
 }
