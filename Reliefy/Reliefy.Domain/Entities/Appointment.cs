@@ -17,7 +17,9 @@ public class Appointment : Auditable
 	public DateTime EndTime { get; set; }
 
 	public AppointmentStatus Status { get; set; }
-
+	
+	public int? Score { get; set; }
+	
 	[ForeignKey("Patient")]
 	public Guid PatientId { get; set; }
 
