@@ -5,6 +5,7 @@ using Reliefy.Application;
 using Reliefy.Application.Interfaces;
 using Reliefy.Application.Services;
 using Reliefy.Infrastructure;
+using Reliefy.UI.Common;
 using Reliefy.UI.Services;
 using Serilog;
 using Serilog.Events;
@@ -45,6 +46,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 

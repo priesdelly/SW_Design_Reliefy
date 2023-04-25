@@ -1,7 +1,9 @@
+using Google.Api.Gax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Reliefy.Application.Interfaces;
+using Reliefy.Application.Services;
 using Reliefy.Domain.Entities;
 
 namespace Reliefy.Infrastructure.Persistence.Interceptors;
@@ -18,7 +20,6 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 	public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
 	{
 		UpdateEntities(eventData.Context);
-
 		return base.SavingChanges(eventData, result);
 	}
 
@@ -36,16 +37,17 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 
 		foreach (var entry in context.ChangeTracker.Entries<Auditable>())
 		{
+			var email = _currentUserService.User?.Email;
 			if (entry.State == EntityState.Added)
 			{
-				entry.Entity.CreatedBy = _currentUserService.Email;
+				entry.Entity.CreatedBy = email;
 				entry.Entity.CreatedDate = DateTime.Now;
 			}
 
 			if (entry.State == EntityState.Added || entry.State == EntityState.Modified ||
 			    entry.HasChangedOwnedEntities())
 			{
-				entry.Entity.UpdatedBy = _currentUserService.Email;
+				entry.Entity.UpdatedBy = email;
 				entry.Entity.UpdatedDate = DateTime.Now;
 			}
 		}

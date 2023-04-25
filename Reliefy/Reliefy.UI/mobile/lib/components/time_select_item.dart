@@ -10,23 +10,20 @@ class TimeSelectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 5,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            color: isSelected ? kSecondaryColor : Colors.transparent,
-            border: Border.all(color: kBlueLight.withOpacity(0.4)),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Text(
-              label,
-              style: TextStyle(fontSize: 16, color: isSelected ? Colors.white : Colors.black),
-              textAlign: TextAlign.center,
-            ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: isSelected ? kSecondaryColor : Colors.transparent,
+          border: Border.all(color: kBlueLight.withOpacity(0.4)),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text(
+            label,
+            style: TextStyle(fontSize: 16, color: isSelected ? Colors.white : Colors.black),
+            textAlign: TextAlign.center,
           ),
         ),
       ),

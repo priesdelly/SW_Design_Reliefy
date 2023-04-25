@@ -1,6 +1,10 @@
+using Reliefy.Application.Model.User;
+
 namespace Reliefy.Application.Interfaces;
 
 public interface ICurrentUserService
 {
-	string Email { get; }
+	public string UserId { get; }
+	public UserDto User { get; }
+	public Task<string> GetEmail();
 }

@@ -3,8 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:mobile/components/appointment_item.dart';
+import 'package:mobile/providers/appointment_provider.dart';
 import 'package:mobile/utils/constant.dart';
-import 'package:mobile/providers/user_provider.dart';
 
 import '../utils/routes.dart';
 
@@ -16,14 +16,7 @@ class AppointmentScreen extends StatefulWidget {
 }
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
-  final UserProvider userProvider = Get.find();
-
-  @override
-  void initState() {
-    userProvider.testGet();
-
-    super.initState();
-  }
+  final AppointmentProvider appointmentProvider = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -43,31 +36,53 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           Expanded(
             child: ListView(
               children: [
-                for (int i = 0; i < 3; i++) AppointmentItem(),
+                FutureBuilder(
+                  future: appointmentProvider.getList(),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data?.length,
+                        itemBuilder: (_, index) => AppointmentItem(appointment: snapshot.data!.elementAt(index)),
+                      );
+                    } else if (snapshot.hasError) {
+                      return const Center(
+                        child: Text("Error occur"),
+                      );
+                    }
+                    return const Padding(
+                      padding: EdgeInsets.all(50),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  },
+                ),
                 Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: kBlueLight.withOpacity(0.4)), borderRadius: BorderRadius.circular(14)),
-                    height: 70,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: kBlueLight.withOpacity(0.4)), borderRadius: BorderRadius.circular(14)),
+                  height: 70,
+                  child: TextButton(
+                    onPressed: () => {},
+                    style: ButtonStyle(
+                      overlayColor: MaterialStateColor.resolveWith((_) => Colors.transparent),
+                    ),
                     child: TextButton(
-                      onPressed: () => {},
-                      style: ButtonStyle(
-                        overlayColor: MaterialStateColor.resolveWith((_) => Colors.transparent),
+                      onPressed: () => Get.toNamed(PageRoutes.createAppointment),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          FaIcon(FontAwesomeIcons.plus),
+                          SizedBox(width: 10),
+                          Text(
+                            "Make new appointment",
+                            style: TextStyle(fontSize: 16),
+                          )
+                        ],
                       ),
-                      child: TextButton(
-                        onPressed: () => Get.toNamed(PageRoutes.createAppointment),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            FaIcon(FontAwesomeIcons.plus),
-                            SizedBox(width: 10),
-                            Text(
-                              "Make new appointment",
-                              style: TextStyle(fontSize: 16),
-                            )
-                          ],
-                        ),
-                      ),
-                    ))
+                    ),
+                  ),
+                ),
               ],
             ),
           )

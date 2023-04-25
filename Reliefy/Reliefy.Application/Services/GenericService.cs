@@ -59,6 +59,12 @@ public class GenericService<TEntity> : IDisposable where TEntity : class
 		return await _dbSet.FirstOrDefaultAsync(filter, cancellationToken);
 	}
 
+	public async Task<TReadDto> Get<TReadDto>(Expression<Func<TEntity, bool>> filter,
+		CancellationToken cancellationToken = default)
+	{
+		return await _dbSet.Where(filter).ProjectToType<TReadDto>().FirstOrDefaultAsync(cancellationToken);
+	}
+
 	public async Task<TEntity> GetById(object id, CancellationToken cancellationToken = default)
 	{
 		return await _dbSet.FindAsync(id, cancellationToken);
@@ -113,9 +119,9 @@ public class GenericService<TEntity> : IDisposable where TEntity : class
 		await _context.SaveChangesAsync(cancellationToken);
 	}
 
-	public async Task Save()
+	public async Task Save(CancellationToken cancellationToken = default)
 	{
-		await _context.SaveChangesAsync();
+		await _context.SaveChangesAsync(cancellationToken);
 	}
 
 	private bool disposed = false;

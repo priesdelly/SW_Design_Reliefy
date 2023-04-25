@@ -1,10 +1,13 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/components/button.dart';
 import 'package:mobile/utils/constant.dart';
+import '../models/appointment.dart';
 
 class AppointmentItem extends StatelessWidget {
-  const AppointmentItem({super.key});
+  final Appointment appointment;
+  const AppointmentItem({super.key, required this.appointment});
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +42,18 @@ class AppointmentItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("นพ.สมชาย ชาติชาย", style: TextStyle(fontSize: 20)),
+                    Text("${appointment.doctor?.firstname} ${appointment.doctor?.lastname}",
+                        style: const TextStyle(fontSize: 20)),
                     Row(
-                      children: const [
-                        Chip(label: Text("12/04/2023"), backgroundColor: kBlueLight),
-                        SizedBox(width: 10),
-                        Chip(label: Text("09:00-12:00"), backgroundColor: kBlueLight),
+                      children: [
+                        Chip(
+                            label: Text(DateFormat('dd/MM/yyyy').format(appointment.startTime!.toLocal())),
+                            backgroundColor: kBlueLight),
+                        const SizedBox(width: 10,),
+                        Chip(
+                            label: Text(
+                                "${DateFormat('HH:mm').format(appointment.startTime!.toLocal())} - ${DateFormat('HH:mm').format(appointment.endTime!.toLocal())}"),
+                            backgroundColor: kBlueLight),
                       ],
                     ),
                     Button(
