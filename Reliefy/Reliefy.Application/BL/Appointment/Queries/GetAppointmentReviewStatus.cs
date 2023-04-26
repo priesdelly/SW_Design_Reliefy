@@ -1,6 +1,4 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Reliefy.Application.Interfaces;
 using Reliefy.Application.Model.User;
 using Reliefy.Application.Services;
 

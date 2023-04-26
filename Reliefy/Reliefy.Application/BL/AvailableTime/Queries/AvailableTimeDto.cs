@@ -1,5 +1,3 @@
-using Reliefy.Application.Model.User;
-
 namespace Reliefy.Application.BL.AvailableTime.Queries;
 
 public class AvailableTimeDto

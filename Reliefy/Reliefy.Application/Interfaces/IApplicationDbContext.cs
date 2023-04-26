@@ -1,9 +1,8 @@
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Reliefy.Domain.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Reliefy.Application.Interfaces;
 
@@ -11,9 +10,13 @@ public interface IApplicationDbContext
 {
 	public DbSet<User> Users { get; }
 	public DbSet<Role> Roles { get; }
+	
 	DbSet<UserRole> UserRoles => Set<UserRole>();
+	
 	public DbSet<Appointment> Appointments { get; }
 	public DbSet<AvailableTime> AvailableTime { get; }
+	public DbSet<TwoFactor> TwoFactor { get; }
+	
 	DbSet<TEntity> Set<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes)] TEntity>() where TEntity : class;
 
 	EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
