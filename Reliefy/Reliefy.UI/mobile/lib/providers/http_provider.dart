@@ -14,6 +14,7 @@ class HttpProvider extends GetConnect {
         final token = await currentUser.getIdToken();
         request.headers['Authorization'] = "Bearer $token";
       }
+      request.headers['Connection'] = "Keep-Alive";
       return request;
     });
 
