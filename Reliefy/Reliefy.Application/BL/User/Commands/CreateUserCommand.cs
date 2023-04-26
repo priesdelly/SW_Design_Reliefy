@@ -12,7 +12,7 @@ public record CreateUserCommand : IRequest<UserDto>
 	public string Uid { get; set; }
 	public string Email { get; set; }
 	public string SignInType { get; set; }
-	public string RoleType { get; set; }
+	public string RoleType { get; set; } = "PATIENT";
 }
 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>

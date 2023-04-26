@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      initialRoute: PageRoutes.home,
+      // initialRoute: PageRoutes.home,
       getPages: pages,
       title: 'Reliefy',
       theme: ThemeData(

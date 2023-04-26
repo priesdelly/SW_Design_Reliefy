@@ -16,22 +16,18 @@ public class JwtMiddleware
 	public async Task Invoke(HttpContext context, UserService userService)
 	{
 		var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-		if (token == null)
+		if (!string.IsNullOrEmpty(token))
 		{
-			await _next(context);
-		}
-
-		var data = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(token);
-		if (data == null)
-		{
-			await _next(context);
-		}
-
-		var user = await userService.Get<UserDto>(x => x.Uid == data!.Uid);
-		if (user != null)
-		{
-			context.Items["UserId"] = user.Id;
-			context.Items["User"] = user;
+			var data = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(token);
+			if (data != null)
+			{
+				var user = await userService.Get<UserDto>(x => x.Uid == data!.Uid);
+				if (user != null)
+				{
+					context.Items["UserId"] = user.Id;
+					context.Items["User"] = user;
+				}
+			}
 		}
 
 		await _next(context);

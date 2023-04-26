@@ -3,9 +3,9 @@ import 'package:mobile/providers/http_provider.dart';
 
 class AppointmentProvider extends HttpProvider {
   Future<List<Appointment>> getList() async {
-    final res = await get<List<dynamic>>('/api/appointment');
-    if (res.statusCode == 200) {
-      return res.body!.map((e) => Appointment.fromJson(e)).toList();
+    final res = await get('/api/appointment');
+    if (res.statusCode == 200 && res.body is List) {
+      return (res.body as List<dynamic>).map((e) => Appointment.fromJson(e)).toList();
     }
     throw Exception(res.statusText);
   }

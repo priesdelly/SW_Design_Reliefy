@@ -67,7 +67,7 @@ class FireAuthController extends GetxController {
     try {
       final result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
       user = result.user;
-      await userController.createUser(uid: user!.uid, email: user.email!, signInType: result.credential!.signInMethod);
+      await userController.createUser(uid: user!.uid, email: user.email!, signInType: "signInWithEmailAndPassword");
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "weak-password":

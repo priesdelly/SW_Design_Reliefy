@@ -13,7 +13,6 @@ public class UserController : ApiControllerBase
 	[HttpPost("CreateUser")]
 	public async Task<ActionResult<UserDto>> CreateUser(CreateUserCommand command)
 	{
-		command.RoleType = "PATIENT";
 		var result = await Mediator.Send(command);
 		if (result == null)
 		{
