@@ -43,13 +43,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-#if !DEBUG
+ 
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<JwtMiddleware>();
-#endif
-
+ 
 app.MapControllers();
 
 app.Run();
