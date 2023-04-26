@@ -1,9 +1,10 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Reliefy.UI.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ApiControllerBase : ControllerBase

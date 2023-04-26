@@ -13,7 +13,7 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: TextButton(onPressed: logout, child: Text("Logout")),
+      child: TextButton(onPressed: logout, child: const Text("Logout")),
     );
   }
 }

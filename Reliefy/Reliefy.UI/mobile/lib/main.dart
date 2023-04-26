@@ -3,12 +3,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/controllers/fireauth_controller.dart';
+import 'package:mobile/providers/appointment_provider.dart';
+import 'package:mobile/providers/available_time_provider.dart';
 import 'package:mobile/providers/http_provider.dart';
 import 'package:mobile/screens/_layout.dart';
 import 'package:mobile/screens/login_screen.dart';
 import 'package:mobile/utils/routes.dart';
 import 'package:mobile/utils/palette.dart';
-import 'controllers/user_controller.dart';
+import 'providers/user_provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -66,8 +68,16 @@ class Bind extends Bindings {
   Bind() {
     Get.lazyPut(() => HttpProvider());
     Get.lazyPut(() => FireAuthController());
-    Get.lazyPut(() => UserController());
+    Get.lazyPut(() => UserProvider());
+    Get.lazyPut(() => AvailableTimeProvider());
+    Get.lazyPut(() => AppointmentProvider());
   }
   @override
-  void dependencies() {}
+  void dependencies() {
+    Get.put(HttpProvider());
+    Get.put(FireAuthController());
+    Get.put(UserProvider());
+    Get.put(AvailableTimeProvider());
+    Get.put(AppointmentProvider());
+  }
 }
