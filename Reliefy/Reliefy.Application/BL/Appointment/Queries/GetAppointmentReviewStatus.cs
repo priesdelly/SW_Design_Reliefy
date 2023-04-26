@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Reliefy.Application.Interfaces;
 using Reliefy.Application.Model.User;
+using Reliefy.Application.Services;
 
 namespace Reliefy.Application.BL.User.Commands;
 
@@ -12,27 +13,16 @@ public record GetAppointmentReviewStatusCommand : IRequest<ReviewDto>
 
 public class GetAppointmentReviewStatusCommandHandler : IRequestHandler<GetAppointmentReviewStatusCommand, ReviewDto>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly AppointmentService _appointmentService;
 
-    public GetAppointmentReviewStatusCommandHandler(IApplicationDbContext context)
+    public GetAppointmentReviewStatusCommandHandler(AppointmentService appointmentService)
     {
-        _context = context;
+        _appointmentService = appointmentService;
     }
 
     public async Task<ReviewDto> Handle(GetAppointmentReviewStatusCommand request, CancellationToken cancellationToken)
     {
-        var appointmentId = request.AppointmentId;
-        var item = await _context.Appointments.FirstOrDefaultAsync(c => c.Id.ToString() == appointmentId, cancellationToken: cancellationToken);
-        if (item == null)
-        {
-            return null;
-        }
-
-        // return new ReviewDto
-        // {
-        //     Score = item.Score
-        // };
-
-        return null;
+        var result = await _appointmentService.GetAppointmentReviewScore(request.AppointmentId);
+        return result;
     }
 }
