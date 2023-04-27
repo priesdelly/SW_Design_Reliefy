@@ -28,13 +28,14 @@ class MyApp extends StatelessWidget {
     final FireAuthController authController = Get.find();
     authController.initialState();
     User? user = FirebaseAuth.instance.currentUser;
+    final UserProvider userProvider = Get.find();
+    await userProvider.getUserInfo();
     return user;
   }
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      // initialRoute: PageRoutes.home,
       getPages: pages,
       title: 'Reliefy',
       theme: ThemeData(

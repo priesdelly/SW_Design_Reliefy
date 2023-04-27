@@ -2,6 +2,7 @@ using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reliefy.Application.BL.User.Commands;
+using Reliefy.Application.BL.User.Queries;
 using Reliefy.Application.BL.User.Queries.DoctorList;
 using Reliefy.Application.Model.User;
 
@@ -15,6 +16,18 @@ public class UserController : ApiControllerBase
 	{
 		var result = await Mediator.Send(command);
 		if (result == null)
+		{
+			return NotFound();
+		}
+
+		return Ok(result);
+	}
+
+	[HttpGet("GetUserInfo")]
+	public async Task<ActionResult<UserDto>> GetUserInfo([FromQuery] GetUserInfoQuery command)
+	{
+		var result = await Mediator.Send(command);
+		if (result is null)
 		{
 			return NotFound();
 		}

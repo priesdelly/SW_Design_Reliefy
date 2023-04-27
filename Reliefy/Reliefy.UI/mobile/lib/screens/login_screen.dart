@@ -70,79 +70,82 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(alignment: Alignment.center, child: SvgPicture.asset("assets/images/loving.svg", height: 200)),
-                const Text("Login",
-                    style: TextStyle(
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                    )),
-                const SizedBox(
-                  height: 30,
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextboxInput(
-                        controller: emailController,
-                        hintText: "Email",
-                        validator: validateEmpty,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      PasswordInput(
-                        controller: passwordController,
-                        hintText: "Password",
-                        validator: validateEmpty,
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Button(label: "Login", onPressed: onLogin),
-                      const Padding(padding: EdgeInsets.all(20), child: Text("OR")),
-                      Button(
-                          backgroundColor: kPowderBlueColor,
-                          onPressed: onGoogleLogin,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset("assets/images/google.png"),
-                              const Text(
-                                "Login with Google",
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              const SizedBox()
-                            ],
-                          )),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "New to Reliefy?",
-                            ),
-                            TextButton(onPressed: () => Get.offNamed(PageRoutes.register), child: const Text("Register"))
-                          ],
-                        ),
-                      )
-                    ],
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(alignment: Alignment.center, child: SvgPicture.asset("assets/images/loving.svg", height: 200)),
+                  const Text("Login",
+                      style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  const SizedBox(
+                    height: 30,
                   ),
-                )
-              ],
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextboxInput(
+                          controller: emailController,
+                          hintText: "Email",
+                          validator: validateEmpty,
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        PasswordInput(
+                          controller: passwordController,
+                          hintText: "Password",
+                          validator: validateEmpty,
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        Button(label: "Login", onPressed: onLogin),
+                        const Padding(padding: EdgeInsets.all(20), child: Text("OR")),
+                        Button(
+                            backgroundColor: kPowderBlueColor,
+                            onPressed: onGoogleLogin,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset("assets/images/google.png"),
+                                const Text(
+                                  "Login with Google",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                const SizedBox()
+                              ],
+                            )),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "New to Reliefy?",
+                              ),
+                              TextButton(onPressed: () => Get.offNamed(PageRoutes.register), child: const Text("Register"))
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

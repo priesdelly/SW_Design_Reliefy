@@ -8,22 +8,25 @@ namespace Reliefy.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
+	private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
-    {
-        _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
-    }
+	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
+		AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
+	{
+		_auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
+	}
 
-    public DbSet<User> Users => Set<User>();
-    public DbSet<Role> Roles => Set<Role>();
-    public DbSet<UserRole> UserRoles => Set<UserRole>();
-    public DbSet<Appointment> Appointments => Set<Appointment>();
-    public DbSet<AvailableTime> AvailableTime => Set<AvailableTime>();
-    public DbSet<TwoFactor> TwoFactor => Set<TwoFactor>();
+	public DbSet<User> Users => Set<User>();
+	public DbSet<Role> Roles => Set<Role>();
+	public DbSet<UserRole> UserRoles => Set<UserRole>();
+	public DbSet<Appointment> Appointments => Set<Appointment>();
+	public DbSet<AvailableTime> AvailableTime => Set<AvailableTime>();
+	public DbSet<TwoFactor> TwoFactor => Set<TwoFactor>();
+	public DbSet<ChatSession> ChatSession => Set<ChatSession>();
+	public DbSet<Chat> Chat => Set<Chat>();
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
-    }
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+	}
 }

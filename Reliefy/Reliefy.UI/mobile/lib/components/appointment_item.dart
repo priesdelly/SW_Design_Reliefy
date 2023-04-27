@@ -1,13 +1,84 @@
+import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/components/button.dart';
 import 'package:mobile/utils/constant.dart';
+import 'package:mobile/utils/routes.dart';
 import '../models/appointment.dart';
 
 class AppointmentItem extends StatelessWidget {
   final Appointment appointment;
   const AppointmentItem({super.key, required this.appointment});
+
+  Widget buttonActionBuild() {
+    if (appointment.startTime!.compareTo(DateTime.now().toUtc()) >= 0) {
+      return Button(
+        onPressed: () => Get.toNamed(PageRoutes.chat, parameters: {
+          "appointmentId": appointment.id!,
+          "doctorId": appointment.doctorId!,
+          "patientId": appointment.patientId!
+        }),
+        height: 45,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Text("Chat", style: TextStyle(color: Colors.white)),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: FaIcon(FontAwesomeIcons.comment, color: Colors.white),
+            ),
+          ],
+        ),
+      );
+    } else if (appointment.status == 3 && (appointment.startTime!.compareTo(DateTime.now().toUtc()) < 0)) {
+      return Button(
+        onPressed: () => {},
+        backgroundColor: Colors.white,
+        borderColor: Colors.black,
+        height: 45,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Text("Cancel", style: TextStyle(color: Colors.black)),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: FaIcon(FontAwesomeIcons.xmark, color: Colors.black),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Button(
+        onPressed: () => Get.toNamed(PageRoutes.chat, parameters: {
+          "appointmentId": appointment.id!,
+          "doctorId": appointment.doctorId!,
+          "patientId": appointment.patientId!,
+          "isLocked": "true",
+        }),
+        height: 45,backgroundColor: Colors.grey.shade600,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Text("View", style: TextStyle(color: Colors.white)),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: FaIcon(FontAwesomeIcons.clockRotateLeft, color: Colors.white),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,52 +120,19 @@ class AppointmentItem extends StatelessWidget {
                         Chip(
                             label: Text(DateFormat('dd/MM/yyyy').format(appointment.startTime!.toLocal())),
                             backgroundColor: kBlueLight),
-                        const SizedBox(width: 10,),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         Chip(
                             label: Text(
                                 "${DateFormat('HH:mm').format(appointment.startTime!.toLocal())} - ${DateFormat('HH:mm').format(appointment.endTime!.toLocal())}"),
                             backgroundColor: kBlueLight),
                       ],
                     ),
-                    Button(
-                      onPressed: () => {},
-                      height: 45,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text("Chat", style: TextStyle(color: Colors.white)),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: FaIcon(FontAwesomeIcons.comment, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Button(
-                    //   onPressed: () => {},
-                    //   backgroundColor: Colors.white,
-                    //   borderColor: Colors.black,
-                    //   height: 45,
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //     children: const [
-                    //       Padding(
-                    //         padding: EdgeInsets.only(left: 10),
-                    //         child: Text("Cancel", style: TextStyle(color: Colors.black)),
-                    //       ),
-                    //       Padding(
-                    //         padding: EdgeInsets.only(right: 10),
-                    //         child: FaIcon(FontAwesomeIcons.xmark, color: Colors.black),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
+                    buttonActionBuild()
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

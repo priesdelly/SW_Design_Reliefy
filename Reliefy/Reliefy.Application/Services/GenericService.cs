@@ -7,8 +7,8 @@ namespace Reliefy.Application.Services;
 
 public class GenericService<TEntity> : IDisposable where TEntity : class
 {
-	protected IApplicationDbContext _context;
-	protected DbSet<TEntity> _dbSet;
+	protected readonly IApplicationDbContext _context;
+	protected readonly DbSet<TEntity> _dbSet;
 
 	public GenericService(IApplicationDbContext context)
 	{

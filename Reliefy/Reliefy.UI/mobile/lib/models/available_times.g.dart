@@ -8,9 +8,9 @@ part of 'available_times.dart';
 
 AvailableTimes _$AvailableTimesFromJson(Map<String, dynamic> json) =>
     AvailableTimes(
-      DateTime.parse(json['startTime'] as String),
-      DateTime.parse(json['toTime'] as String),
-      json['doctorId'] as String,
+      startTime: DateTime.parse(json['startTime'] as String),
+      toTime: DateTime.parse(json['toTime'] as String),
+      doctorId: json['doctorId'] as String,
     );
 
 Map<String, dynamic> _$AvailableTimesToJson(AvailableTimes instance) =>

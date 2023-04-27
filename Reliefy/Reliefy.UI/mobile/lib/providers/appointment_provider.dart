@@ -16,6 +16,6 @@ class AppointmentProvider extends HttpProvider {
     if (res.statusCode == 200) {
       return Appointment.fromJson(res.body);
     }
-    return null;
+    throw Exception(res.statusText);
   }
 }

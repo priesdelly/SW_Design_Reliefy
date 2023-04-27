@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Reliefy.UI.Controllers;
 
-#if !DEBUG
 [Authorize]
-#endif
 [ApiController]
 [Route("api/[controller]")]
 public class ApiControllerBase : ControllerBase

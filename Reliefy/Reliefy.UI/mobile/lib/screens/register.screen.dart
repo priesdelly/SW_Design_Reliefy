@@ -51,97 +51,100 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(alignment: Alignment.center, child: SvgPicture.asset("assets/images/sprinting.svg", height: 200)),
-                const Text("Register",
-                    style: TextStyle(
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                    )),
-                const SizedBox(
-                  height: 30,
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextboxInput(
-                        controller: emailController,
-                        hintText: "Email",
-                        validator: validateEmpty,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      PasswordInput(
-                        controller: passwordController,
-                        hintText: "Password",
-                        validator: validateEmpty,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      PasswordInput(
-                        controller: confirmPasswordController,
-                        hintText: "Confirm Password",
-                        validator: validateEmpty,
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: TextButton(
-                          style: ButtonStyle(
-                            overlayColor: MaterialStateColor.resolveWith(
-                              (_) => Colors.transparent,
-                            ),
-                          ),
-                          onPressed: onRegister,
-                          child: const Text(
-                            "Register",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Already joined Reliefy?",
-                            ),
-                            TextButton(
-                              onPressed: () => Get.offNamed(PageRoutes.login),
-                              style: ElevatedButton.styleFrom(
-                                splashFactory: NoSplash.splashFactory,
-                              ),
-                              child: const Text("Login"),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(alignment: Alignment.center, child: SvgPicture.asset("assets/images/sprinting.svg", height: 200)),
+                  const Text("Register",
+                      style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  const SizedBox(
+                    height: 30,
                   ),
-                )
-              ],
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextboxInput(
+                          controller: emailController,
+                          hintText: "Email",
+                          validator: validateEmpty,
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        PasswordInput(
+                          controller: passwordController,
+                          hintText: "Password",
+                          validator: validateEmpty,
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        PasswordInput(
+                          controller: confirmPasswordController,
+                          hintText: "Confirm Password",
+                          validator: validateEmpty,
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        Container(
+                          height: 50,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: TextButton(
+                            style: ButtonStyle(
+                              overlayColor: MaterialStateColor.resolveWith(
+                                (_) => Colors.transparent,
+                              ),
+                            ),
+                            onPressed: onRegister,
+                            child: const Text(
+                              "Register",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Already joined Reliefy?",
+                              ),
+                              TextButton(
+                                onPressed: () => Get.offNamed(PageRoutes.login),
+                                style: ElevatedButton.styleFrom(
+                                  splashFactory: NoSplash.splashFactory,
+                                ),
+                                child: const Text("Login"),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

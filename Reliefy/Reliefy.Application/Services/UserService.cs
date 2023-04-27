@@ -8,13 +8,9 @@ namespace Reliefy.Application.Services;
 
 public class UserService : GenericService<User>
 {
-    private readonly IApplicationDbContext _context;
-    
     public UserService(IApplicationDbContext context) : base(context)
     {
-        _context = context; 
     }
-
 
     public async Task<TwoFactor> SendCode(string email)
     {

@@ -15,6 +15,11 @@ class FireAuthController extends GetxController {
     });
   }
 
+  String? getUid() {
+    final user = FirebaseAuth.instance.currentUser;
+    return user?.uid;
+  }
+
   Future<User?> signInUsingEmailPassword({required String email, required String password}) async {
     User? user;
     try {

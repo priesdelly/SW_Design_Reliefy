@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get_connect/connect.dart';
 
+import '../utils/constant.dart';
+
 class HttpProvider extends GetConnect {
   @override
   void onInit() {
-    allowAutoSignedCert = true;
-    httpClient.baseUrl = 'https://localhost:5001';
+    // allowAutoSignedCert = true;
+    httpClient.baseUrl = kServerUrl;
     httpClient.timeout = const Duration(seconds: 120);
 
     httpClient.addAuthenticator<dynamic>((request) async {
@@ -20,7 +22,8 @@ class HttpProvider extends GetConnect {
 
     // httpClient.addResponseModifier((request, response) {
     //   switch (response.statusCode) {
-    //     case 400:
+    //     case 401:
+    //       FirebaseAuth.instance.signOut();
     //       break;
     //   }
     // });

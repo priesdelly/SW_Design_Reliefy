@@ -6,6 +6,7 @@ using Reliefy.Application.Interfaces;
 using Reliefy.Application.Services;
 using Reliefy.Infrastructure;
 using Reliefy.UI.Common;
+using Reliefy.UI.Hubs;
 using Reliefy.UI.Services;
 using Serilog;
 using Serilog.Events;
@@ -29,6 +30,11 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddDatabaseService(builder.Configuration);
 builder.Services.AddFirebaseAuthService(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddSignalR(options =>
+{
+	options.HandshakeTimeout = TimeSpan.FromSeconds(5);
+	options.KeepAliveInterval = TimeSpan.FromSeconds(10);
+});
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 	containerBuilder.RegisterAssemblyTypes(typeof(GenericService<>).Assembly)
 		.AsClosedTypesOf(typeof(GenericService<>)));
@@ -43,11 +49,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
- 
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<JwtMiddleware>();
- 
+
 app.MapControllers();
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();

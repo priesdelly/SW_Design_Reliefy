@@ -7,7 +7,7 @@ class AvailableTimes {
   final DateTime toTime;
   final String doctorId;
 
-  AvailableTimes(this.startTime, this.toTime, this.doctorId);
+  AvailableTimes({required this.startTime, required this.toTime, required this.doctorId});
   factory AvailableTimes.fromJson(Map<String, dynamic> json) => _$AvailableTimesFromJson(json);
 
   Map<String, dynamic> toJson() => _$AvailableTimesToJson(this);

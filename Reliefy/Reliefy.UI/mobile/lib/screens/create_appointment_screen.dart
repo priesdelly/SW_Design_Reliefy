@@ -11,6 +11,7 @@ import 'package:mobile/utils/alert.dart';
 import 'package:mobile/utils/loader.dart';
 import '../models/user.dart';
 import '../utils/constant.dart';
+import '../utils/routes.dart';
 
 class CreateAppointmentScreen extends StatefulWidget {
   const CreateAppointmentScreen({super.key});
@@ -64,7 +65,7 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
       Alert.show(title: "Something when wrong");
     } finally {
       Loader.hide();
-      Get.back();
+      Get.offNamed(PageRoutes.home);
     }
   }
 

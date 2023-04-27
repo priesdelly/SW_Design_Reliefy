@@ -29,6 +29,23 @@ public class JwtMiddleware
 				}
 			}
 		}
+		else
+		{
+			token = context.Request.Query.FirstOrDefault(x => x.Key == "access_token").Value.ToString();
+			if (!string.IsNullOrEmpty(token))
+			{
+				var data = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(token);
+				if (data != null)
+				{
+					var user = await userService.Get<UserDto>(x => x.Uid == data!.Uid);
+					if (user != null)
+					{
+						context.Items["UserId"] = user.Id;
+						context.Items["User"] = user;
+					}
+				}
+			}
+		}
 
 		await _next(context);
 	}
