@@ -48,10 +48,10 @@ public class UserService : GenericService<User>
     {
         try
         {
-            var smtpServer = "sandbox.smtp.mailtrap.io";
+            var smtpServer = "sandbox.smtp.mailtrap.iน";
             var smtpPort = 2525;
-            var smtpUsername = "a43be61d75ea0d";
-            var smtpPassword = "42586b73e481b9";
+            var smtpUsername = "c835ef720ce075";
+            var smtpPassword = "e25e31c356e6c7";
 
 
             // Create the SMTP client object
