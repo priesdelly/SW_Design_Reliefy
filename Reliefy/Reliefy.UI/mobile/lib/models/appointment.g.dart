@@ -23,6 +23,7 @@ Appointment _$AppointmentFromJson(Map<String, dynamic> json) => Appointment(
           ? null
           : User.fromJson(json['doctor'] as Map<String, dynamic>),
       status: json['status'] as int?,
+      score: (json['score'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$AppointmentToJson(Appointment instance) =>
@@ -35,4 +36,5 @@ Map<String, dynamic> _$AppointmentToJson(Appointment instance) =>
       'doctorId': instance.doctorId,
       'doctor': instance.doctor,
       'status': instance.status,
+      'score': instance.score,
     };

@@ -48,6 +48,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserD
 				Uid = request.Uid,
 				Email = request.Email,
 				SignInType = request.SignInType,
+				IsVerified = request.SignInType == "google.com"
 			};
 
 			_userService.Add(user);

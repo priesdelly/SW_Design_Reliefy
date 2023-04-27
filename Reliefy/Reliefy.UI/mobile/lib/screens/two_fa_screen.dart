@@ -142,7 +142,7 @@ class _TwoFaScreenState extends State<TwoFaScreen> {
                   ),
                   Text(
                     errString,
-                    style: TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.red),
                   )
                 ],
               ),

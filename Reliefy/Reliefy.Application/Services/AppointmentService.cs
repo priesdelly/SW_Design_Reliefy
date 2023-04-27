@@ -1,5 +1,6 @@
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Reliefy.Application.BL.Appointment.Queries;
 using Reliefy.Application.BL.AvailableTime.Queries;
 using Reliefy.Application.Interfaces;
 using Reliefy.Application.Model.User;
@@ -40,29 +41,6 @@ public class AppointmentService : GenericService<Appointment>
             return null;
         }
 
-        item.Score ??= -1;
-
-        return new ReviewDto
-        {
-            Score = item.Score.Value
-        };
-    }
-
-    public async Task<ReviewDto> SetAppointmentReviewScore(string appointmentId, int score)
-    {
-        var item = await _context.Appointments.FirstOrDefaultAsync(c => c.Id.ToString() == appointmentId);
-        if (item == null)
-        {
-            return null;
-        }
-
-        item.Score = score;
-        _context.Entry(item).Property(x => x.Score).IsModified = true;
-        await _context.SaveChangesAsync();
-
-        return new ReviewDto
-        {
-            Score = item.Score.Value
-        };
+        return item.Adapt<ReviewDto>();
     }
 }

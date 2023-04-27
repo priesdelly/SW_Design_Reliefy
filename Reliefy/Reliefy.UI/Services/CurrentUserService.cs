@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using FirebaseAdmin.Auth;
+using Reliefy.Application.BL.User.Queries;
 using Reliefy.Application.Interfaces;
 using Reliefy.Application.Model.User;
 
@@ -10,6 +11,7 @@ public class CurrentUserService : ICurrentUserService
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	public string? UserId => _httpContextAccessor.HttpContext?.Items["UserId"]?.ToString();
 	public UserDto? User => (UserDto?)_httpContextAccessor.HttpContext?.Items["User"];
+	public RoleDto? Role => User?.UserRoles.FirstOrDefault()?.Role;
 
 	public CurrentUserService(IHttpContextAccessor httpContextAccessor)
 	{

@@ -6,6 +6,7 @@ import 'package:mobile/components/appointment_item.dart';
 import 'package:mobile/providers/appointment_provider.dart';
 import 'package:mobile/utils/constant.dart';
 
+import '../models/appointment.dart';
 import '../utils/routes.dart';
 
 class AppointmentScreen extends StatefulWidget {
@@ -17,6 +18,18 @@ class AppointmentScreen extends StatefulWidget {
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
   final AppointmentProvider appointmentProvider = Get.find();
+
+  late Future<List<Appointment>> getList;
+
+  _AppointmentScreenState() {
+    getList = appointmentProvider.getList();
+  }
+
+  void refresh() {
+    setState(() {
+      getList = appointmentProvider.getList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +50,16 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             child: ListView(
               children: [
                 FutureBuilder(
-                  future: appointmentProvider.getList(),
+                  future: getList,
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: snapshot.data?.length,
-                        itemBuilder: (_, index) => AppointmentItem(appointment: snapshot.data!.elementAt(index)),
+                        itemBuilder: (_, index) => AppointmentItem(
+                          appointment: snapshot.data!.elementAt(index),
+                          cancelCallback: refresh,
+                        ),
                       );
                     } else if (snapshot.hasError) {
                       return const Center(

@@ -22,9 +22,9 @@ public class CancelAppointmentCommandHandler : IRequestHandler<CancelAppointment
 
 	public async Task<AppointmentDto> Handle(CancelAppointmentCommand request, CancellationToken cancellationToken)
 	{
-		var entity = await _appointmentService.GetById(request.AppointmentId, cancellationToken);
+		var entity = await _appointmentService.Get(x => x.Id == Guid.Parse(request.AppointmentId), cancellationToken);
 		entity.Status = AppointmentStatus.Canceled;
-		await _appointmentService.AddWithSave(entity, cancellationToken: cancellationToken);
+		await _appointmentService.UpdateWithSave(entity, cancellationToken: cancellationToken);
 		return entity.Adapt<AppointmentDto>();
 	}
 }

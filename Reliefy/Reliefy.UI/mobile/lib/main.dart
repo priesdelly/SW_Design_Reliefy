@@ -6,7 +6,7 @@ import 'package:mobile/providers/appointment_provider.dart';
 import 'package:mobile/providers/available_time_provider.dart';
 import 'package:mobile/providers/http_provider.dart';
 import 'package:mobile/screens/_layout.dart';
-import 'package:mobile/screens/complete_info.dart';
+import 'package:mobile/screens/complete_info_screen.dart';
 import 'package:mobile/screens/login_screen.dart';
 import 'package:mobile/screens/two_fa_screen.dart';
 import 'package:mobile/utils/routes.dart';

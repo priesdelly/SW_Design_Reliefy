@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
-import 'package:mobile/screens/two_fa_screen.dart';
+import 'package:mobile/screens/appointment_history_screen.dart';
 import '../components/bottom_navigator.dart';
 import '../controllers/fireauth_controller.dart';
 import 'appointment_screen.dart';
-import 'home_screen.dart';
 import 'menu_screen.dart';
 
 class LayoutScreen extends StatefulWidget {
@@ -21,7 +20,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
   int currentPageIndex = 0;
   static List<LayoutPage> layoutPages = [
     LayoutPage("Appointment", const AppointmentScreen()),
-    LayoutPage("Home", const HomeScreen()),
+    LayoutPage("History", const AppointmentHistoryScreen()),
     LayoutPage("Menu", MenuScreen()),
   ];
 

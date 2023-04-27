@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/utils/constant.dart';
 
+// ignore: must_be_immutable
 class Accordion extends StatefulWidget {
   final String title;
   final Widget content;

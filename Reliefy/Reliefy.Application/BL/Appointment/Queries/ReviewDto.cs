@@ -1,9 +1,6 @@
-using System.Text.Json.Serialization;
-
-namespace Reliefy.Application.Model.User;
+namespace Reliefy.Application.BL.Appointment.Queries;
 
 public class ReviewDto
 {
-    [JsonPropertyName("score")]
-    public int Score { get; set; }
+    public float Score { get; set; }
 }

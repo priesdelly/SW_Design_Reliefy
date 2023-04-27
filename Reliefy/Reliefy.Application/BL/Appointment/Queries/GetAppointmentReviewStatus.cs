@@ -1,4 +1,5 @@
 using MediatR;
+using Reliefy.Application.BL.Appointment.Queries;
 using Reliefy.Application.Model.User;
 using Reliefy.Application.Services;
 
