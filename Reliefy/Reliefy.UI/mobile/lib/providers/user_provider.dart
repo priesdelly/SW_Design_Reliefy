@@ -64,4 +64,13 @@ class UserProvider extends HttpProvider {
     }
     throw Exception(res.statusText);
   }
+
+  Future<User?> updateUserInfo(String firstname, String lastname, String phoneNumber) async {
+    Map<String, dynamic> data = {"firstname": firstname, "lastname": lastname, "phoneNumber": phoneNumber};
+    final res = await post('/api/user/updateUserInfo', data);
+    if (res.statusCode == 200) {
+      return User.fromJson(res.body);
+    }
+    throw Exception(res.statusText);
+  }
 }

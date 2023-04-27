@@ -56,4 +56,16 @@ public class UserController : ApiControllerBase
 		var result = await Mediator.Send(command);
 		return Ok(result);
 	}
+
+	[HttpPost("UpdateUserInfo")]
+	public async Task<ActionResult<UserDto>> UpdateUserInfo(UpdateUserInfoCommand command)
+	{
+		var result = await Mediator.Send(command);
+		if (result is null)
+		{
+			return NotFound();
+		}
+
+		return Ok(result);
+	}
 }

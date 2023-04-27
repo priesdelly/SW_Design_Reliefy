@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/instance_manager.dart';
-import 'package:mobile/controllers/fireauth_controller.dart';
+import 'package:get/get.dart';
+import 'package:mobile/providers/user_provider.dart';
+import 'package:mobile/utils/loader.dart';
+import 'package:mobile/utils/routes.dart';
 import '../components/textbox_input.dart';
 
 class CompleteInfoScreen extends StatefulWidget {
@@ -13,7 +15,7 @@ class CompleteInfoScreen extends StatefulWidget {
 
 class CompleteInfoScreenState extends State<CompleteInfoScreen> {
   final _formKey = GlobalKey<FormState>();
-  final FireAuthController authController = Get.find();
+  final UserProvider _userProvider = Get.find();
 
   final firstnameController = TextEditingController();
   final lastnameController = TextEditingController();
@@ -23,7 +25,17 @@ class CompleteInfoScreenState extends State<CompleteInfoScreen> {
     return (value != null && value.isEmpty) ? '' : null;
   }
 
-  void onSubmit() async {}
+  void onSubmit() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        Loader.show();
+        await _userProvider.updateUserInfo(firstnameController.text, lastnameController.text, phoneController.text);
+        Get.offAllNamed(PageRoutes.home);
+      } finally {
+        Loader.hide();
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

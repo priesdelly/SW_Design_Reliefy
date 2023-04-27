@@ -21,8 +21,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
   int currentPageIndex = 0;
   static List<LayoutPage> layoutPages = [
     LayoutPage("Appointment", const AppointmentScreen()),
-    // LayoutPage("Home", const HomeScreen()),
-    LayoutPage("2fa", TwoFaScreen()),
+    LayoutPage("Home", const HomeScreen()),
     LayoutPage("Menu", MenuScreen()),
   ];
 
