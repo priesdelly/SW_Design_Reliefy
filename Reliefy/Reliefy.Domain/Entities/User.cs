@@ -33,6 +33,10 @@ public class User : Auditable
 	[MaxLength(10)]
 	[Column(TypeName = "character varying")]
 	public string PhoneNumber { get; set; }
+	
+	public bool IsVerified { get; set; }
+	
+	public bool IsCompleteInfo { get; set; }
 
 	public List<UserRole> UserRoles { get; set; }
 }
