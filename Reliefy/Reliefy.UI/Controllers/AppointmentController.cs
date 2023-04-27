@@ -51,4 +51,12 @@ public class AppointmentController : ApiControllerBase
         var result = await Mediator.Send(command);
         return Ok(result);
     }
+    
+    [HttpPut("Cancel/{appointmentId}")]
+    public async Task<ActionResult<AppointmentDto>> Cancel(string appointmentId)
+    {
+        var command = new CancelAppointmentCommand { AppointmentId = appointmentId };
+        var result = await Mediator.Send(command);
+        return Ok(result);
+    }
 }

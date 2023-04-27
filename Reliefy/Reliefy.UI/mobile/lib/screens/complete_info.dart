@@ -1,52 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/instance_manager.dart';
-import 'package:get/route_manager.dart';
 import 'package:mobile/controllers/fireauth_controller.dart';
-import '../components/password_input.dart';
 import '../components/textbox_input.dart';
-import '../utils/alert.dart';
-import '../utils/loader.dart';
-import '../utils/routes.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class CompleteInfoScreen extends StatefulWidget {
+  const CompleteInfoScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<CompleteInfoScreen> createState() => CompleteInfoScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class CompleteInfoScreenState extends State<CompleteInfoScreen> {
   final _formKey = GlobalKey<FormState>();
   final FireAuthController authController = Get.find();
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final firstnameController = TextEditingController();
+  final lastnameController = TextEditingController();
+  final phoneController = TextEditingController();
 
   String? validateEmpty(String? value) {
     return (value != null && value.isEmpty) ? '' : null;
   }
 
-  void onRegister() async {
-    if (passwordController.text.trim() != confirmPasswordController.text.trim()) {
-      Alert.show(title: "Password and Confirm password not match");
-      return;
-    }
-    if (_formKey.currentState!.validate()) {
-      try {
-        Loader.show();
-        await authController.signUp(email: emailController.text, password: passwordController.text);
-        Get.offAllNamed(PageRoutes.twoFa);
-      } on ArgumentError catch (e) {
-        Alert.show(title: e.invalidValue);
-      } finally {
-        if (context.mounted) {
-          Loader.hide();
-        }
-      }
-    }
-  }
+  void onSubmit() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +38,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Align(alignment: Alignment.center, child: SvgPicture.asset("assets/images/sprinting.svg", height: 200)),
-                  const Text("Register",
+                  Align(alignment: Alignment.center, child: SvgPicture.asset("assets/images/clumsy.svg", height: 250)),
+                  const Text("Complete infomation",
                       style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
@@ -75,24 +52,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Column(
                       children: [
                         TextboxInput(
-                          controller: emailController,
-                          hintText: "Email",
+                          controller: firstnameController,
+                          hintText: "Firstname",
                           validator: validateEmpty,
                         ),
                         const SizedBox(
                           height: 15,
                         ),
-                        PasswordInput(
-                          controller: passwordController,
-                          hintText: "Password",
+                        TextboxInput(
+                          controller: lastnameController,
+                          hintText: "Lastname",
                           validator: validateEmpty,
                         ),
                         const SizedBox(
                           height: 15,
                         ),
-                        PasswordInput(
-                          controller: confirmPasswordController,
-                          hintText: "Confirm Password",
+                        TextboxInput(
+                          controller: phoneController,
+                          hintText: "Phone number",
                           validator: validateEmpty,
                         ),
                         const SizedBox(
@@ -111,35 +88,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 (_) => Colors.transparent,
                               ),
                             ),
-                            onPressed: onRegister,
+                            onPressed: onSubmit,
                             child: const Text(
-                              "Register",
+                              "Submit",
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                "Already joined Reliefy?",
-                              ),
-                              TextButton(
-                                onPressed: () => Get.offNamed(PageRoutes.login),
-                                style: ElevatedButton.styleFrom(
-                                  splashFactory: NoSplash.splashFactory,
-                                ),
-                                child: const Text("Login"),
-                              )
-                            ],
-                          ),
-                        )
                       ],
                     ),
                   )

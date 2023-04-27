@@ -14,6 +14,11 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       lastname: json['lastname'] as String?,
       email: json['email'] as String,
       phoneNumber: json['phoneNumber'] as String?,
+      isCompleteInfo: json['isCompleteInfo'] as bool?,
+      isVerified: json['isVerified'] as bool?,
+      userRoles: (json['userRoles'] as List<dynamic>?)
+          ?.map((e) => UserRole.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -24,4 +29,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'lastname': instance.lastname,
       'email': instance.email,
       'phoneNumber': instance.phoneNumber,
+      'isVerified': instance.isVerified,
+      'isCompleteInfo': instance.isCompleteInfo,
+      'userRoles': instance.userRoles,
     };

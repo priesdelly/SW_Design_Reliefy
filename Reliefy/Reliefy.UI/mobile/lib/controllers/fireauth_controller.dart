@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/providers/user_provider.dart';
 import '../utils/routes.dart';
+import '../models/user.dart' as u;
 
 class FireAuthController extends GetxController {
   final UserProvider userController = Get.find();
@@ -20,12 +21,11 @@ class FireAuthController extends GetxController {
     return user?.uid;
   }
 
-  Future<User?> signInUsingEmailPassword({required String email, required String password}) async {
-    User? user;
+  Future<u.User?> signInUsingEmailPassword({required String email, required String password}) async {
+    u.User? user;
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-      user = credential.user;
-      await userController.createUser(uid: user!.uid, email: user.email!, signInType: "signInWithEmailAndPassword");
+      user = await userController.createUser(uid: credential.user!.uid, email: credential.user!.email!, signInType: "signInWithEmailAndPassword");
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "user-not-found":
@@ -41,8 +41,8 @@ class FireAuthController extends GetxController {
     return user;
   }
 
-  Future<User?> signInWithGoogle() async {
-    User? user;
+  Future<u.User?> signInWithGoogle() async {
+    u.User? user;
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
@@ -55,8 +55,7 @@ class FireAuthController extends GetxController {
 
       // Once signed in, return the UserCredential
       final result = await FirebaseAuth.instance.signInWithCredential(credential);
-      user = result.user;
-      await userController.createUser(uid: user!.uid, email: user.email!, signInType: credential.signInMethod);
+      user = await userController.createUser(uid: result.user!.uid, email: result.user!.email!, signInType: credential.signInMethod);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         throw ArgumentError.value("Account already exist.");
@@ -67,12 +66,11 @@ class FireAuthController extends GetxController {
     return user;
   }
 
-  Future<User?> signUp({required String email, required String password}) async {
-    User? user;
+  Future<u.User?> signUp({required String email, required String password}) async {
+    u.User? user;
     try {
       final result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-      user = result.user;
-      await userController.createUser(uid: user!.uid, email: user.email!, signInType: "signInWithEmailAndPassword");
+      user = await userController.createUser(uid: result.user!.uid, email: result.user!.email!, signInType: "signInWithEmailAndPassword");
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "weak-password":

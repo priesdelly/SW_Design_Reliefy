@@ -1,7 +1,9 @@
 import 'package:get/route_manager.dart';
 import 'package:mobile/screens/_layout.dart';
+import 'package:mobile/screens/complete_info.dart';
 import 'package:mobile/screens/create_appointment_screen.dart';
 import 'package:mobile/screens/login_screen.dart';
+import 'package:mobile/screens/two_fa_screen.dart';
 import '../screens/chat_screen.dart';
 import '../screens/register.screen.dart';
 
@@ -11,6 +13,8 @@ class PageRoutes {
   static const String register = "/register";
   static const String createAppointment = "/createAppointment";
   static const String chat = "/chat";
+  static const String twoFa = "/twoFa";
+  static const String conpleteInfo = "/completeInfo";
 }
 
 final pages = [
@@ -41,6 +45,18 @@ final pages = [
   GetPage(
     name: PageRoutes.chat,
     page: () => const ChatScreen(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 300),
+  ),
+  GetPage(
+    name: PageRoutes.twoFa,
+    page: () => TwoFaScreen(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 300),
+  ),
+  GetPage(
+    name: PageRoutes.conpleteInfo,
+    page: () => const CompleteInfoScreen(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 300),
   ),

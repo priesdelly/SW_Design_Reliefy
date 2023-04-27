@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:mobile/components/button.dart';
+import 'package:mobile/models/user.dart';
 import 'package:mobile/utils/alert.dart';
 import 'package:mobile/utils/constant.dart';
 import 'package:mobile/utils/routes.dart';
@@ -36,8 +37,15 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       try {
         Loader.show();
-        await authController.signInUsingEmailPassword(email: emailController.text, password: passwordController.text);
-        Get.offAllNamed(PageRoutes.home);
+        final User? user =
+            await authController.signInUsingEmailPassword(email: emailController.text, password: passwordController.text);
+        if (user != null && (user.isVerified == null || user.isVerified == false)) {
+          Get.offAllNamed(PageRoutes.twoFa);
+        } else if (user != null && (user.isCompleteInfo == null || user.isCompleteInfo == false)) {
+          Get.offAllNamed(PageRoutes.conpleteInfo);
+        } else {
+          Get.offAllNamed(PageRoutes.home);
+        }
       } on ArgumentError catch (e) {
         Alert.show(title: e.invalidValue);
       } finally {
@@ -49,8 +57,12 @@ class _LoginScreenState extends State<LoginScreen> {
   void onGoogleLogin() async {
     try {
       Loader.show();
-      await authController.signInWithGoogle();
-      Get.offAllNamed(PageRoutes.home);
+      final User? user = await authController.signInWithGoogle();
+      if (user != null && (user.isCompleteInfo == null || user.isCompleteInfo == false)) {
+        Get.offAllNamed(PageRoutes.conpleteInfo);
+      } else {
+        Get.offAllNamed(PageRoutes.home);
+      }
     } on ArgumentError catch (e) {
       Alert.show(title: e.invalidValue);
     } finally {

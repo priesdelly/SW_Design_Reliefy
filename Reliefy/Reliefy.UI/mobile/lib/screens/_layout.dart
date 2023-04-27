@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
+import 'package:mobile/screens/two_fa_screen.dart';
 import '../components/bottom_navigator.dart';
 import '../controllers/fireauth_controller.dart';
 import 'appointment_screen.dart';
@@ -20,7 +21,8 @@ class _LayoutScreenState extends State<LayoutScreen> {
   int currentPageIndex = 0;
   static List<LayoutPage> layoutPages = [
     LayoutPage("Appointment", const AppointmentScreen()),
-    LayoutPage("Home", const HomeScreen()),
+    // LayoutPage("Home", const HomeScreen()),
+    LayoutPage("2fa", TwoFaScreen()),
     LayoutPage("Menu", MenuScreen()),
   ];
 

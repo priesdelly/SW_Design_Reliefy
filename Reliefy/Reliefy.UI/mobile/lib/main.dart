@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,9 +6,12 @@ import 'package:mobile/providers/appointment_provider.dart';
 import 'package:mobile/providers/available_time_provider.dart';
 import 'package:mobile/providers/http_provider.dart';
 import 'package:mobile/screens/_layout.dart';
+import 'package:mobile/screens/complete_info.dart';
 import 'package:mobile/screens/login_screen.dart';
+import 'package:mobile/screens/two_fa_screen.dart';
 import 'package:mobile/utils/routes.dart';
 import 'package:mobile/utils/palette.dart';
+import 'models/user.dart';
 import 'providers/user_provider.dart';
 import 'firebase_options.dart';
 
@@ -24,13 +26,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  Future<User?> _initial() async {
+  Future<User?> _initial() {
     final FireAuthController authController = Get.find();
     authController.initialState();
-    User? user = FirebaseAuth.instance.currentUser;
     final UserProvider userProvider = Get.find();
-    await userProvider.getUserInfo();
-    return user;
+    return userProvider.getUserInfo();
   }
 
   @override
@@ -50,7 +50,14 @@ class MyApp extends StatelessWidget {
           future: _initial(),
           builder: (_, snapshot) {
             if (snapshot.hasData) {
-              return const LayoutScreen();
+              if (snapshot.data != null && (snapshot.data!.isVerified == null || snapshot.data!.isVerified == false)) {
+                return const TwoFaScreen();
+              } else if (snapshot.data != null &&
+                  (snapshot.data!.isCompleteInfo == null || snapshot.data!.isCompleteInfo == false)) {
+                return const CompleteInfoScreen();
+              } else {
+                return const LayoutScreen();
+              }
             } else if (!snapshot.hasData) {
               return const LoginScreen();
             } else {

@@ -12,7 +12,7 @@ class AppointmentItem extends StatelessWidget {
   const AppointmentItem({super.key, required this.appointment});
 
   Widget buttonActionBuild() {
-    if (appointment.startTime!.compareTo(DateTime.now().toUtc()) >= 0) {
+    if (appointment.startTime!.compareTo(DateTime.now().toUtc()) >= 0 && appointment.endTime!.compareTo(DateTime.now().toUtc()) <= 0) {
       return Button(
         onPressed: () => Get.toNamed(PageRoutes.chat, parameters: {
           "appointmentId": appointment.id!,
@@ -34,7 +34,7 @@ class AppointmentItem extends StatelessWidget {
           ],
         ),
       );
-    } else if (appointment.status == 3 && (appointment.startTime!.compareTo(DateTime.now().toUtc()) < 0)) {
+    } else if (appointment.status == 3 && (appointment.endTime!.compareTo(DateTime.now().toUtc()) > 0)) {
       return Button(
         onPressed: () => {},
         backgroundColor: Colors.white,
