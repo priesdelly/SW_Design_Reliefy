@@ -55,7 +55,6 @@ public class UserController : ApiControllerBase
         return Ok(result);
     }
 
-    [AllowAnonymous]
     [HttpPost("SendOtp")]
     public async Task<ActionResult<BaseModel>> SendOtp([FromBody] SendOtpRequest request)
     {
