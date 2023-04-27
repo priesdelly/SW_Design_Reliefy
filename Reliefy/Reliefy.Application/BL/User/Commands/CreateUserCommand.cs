@@ -12,7 +12,7 @@ public record CreateUserCommand : IRequest<UserDto>
 	public string Uid { get; set; }
 	public string Email { get; set; }
 	public string SignInType { get; set; }
-	public string RoleType { get; set; } = "PATIENT";
+	public string RoleType { get; set; }
 }
 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDto>
@@ -28,6 +28,11 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserD
 
 	public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
 	{
+		if (request.RoleType == null)
+		{
+			request.RoleType = "PATIENT";
+		}
+
 		var role = _context.Roles.FirstOrDefault(x => x.NormalizedName == request.RoleType);
 		if (role == null)
 		{
