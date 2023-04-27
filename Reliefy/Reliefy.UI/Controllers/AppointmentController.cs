@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reliefy.Application.BL.Appointment.Commands;
 using Reliefy.Application.BL.Appointment.Queries;
@@ -18,40 +17,38 @@ public class AppointmentController : ApiControllerBase
     [HttpGet]
     public async Task<ActionResult<List<AppointmentDto>>> GetList()
     {
-        // object query = null;
-        //
-        // if (_currentUserService.User == "Patient")
-        // {
-        //     query = new GetAppointmentPatientQuery();
-        // }
-        // else
-        // {
-        //     
-        // }
-        //
-        //
-        // var result = await Mediator.Send(query);
-        // return Ok(result);
+        var currentUser = _currentUserService
+            .User
+            .UserRoles
+            .FirstOrDefault();
+        if (currentUser == null)
+        {
+            return NotFound("User not found");
+        }
 
+        switch (currentUser.Role.NormalizedName)
+        {
+            case "PATIENT":
+            {
+                var queryPatient = new GetAppointmentPatientQuery();
+                var resultPatient = await Mediator.Send(queryPatient);
+                return Ok(resultPatient);
+            }
+            case "DOCTOR":
+            {
+                var queryDoctor = new GetAppointmentDoctorQuery();
+                var resultDoctor = await Mediator.Send(queryDoctor);
+                return Ok(resultDoctor);
+            }
+        }
 
-        var query = new GetAppointmentPatientQuery();
-        var result = await Mediator.Send(query);
-        return Ok(result);
+        return NotFound("User role not found");
     }
 
     [HttpPost]
     public async Task<ActionResult<AppointmentDto>> Create(CreateAppointmentCommand command)
     {
         var result = await Mediator.Send(command);
-        return Ok(result);
-    }
-
-
-    [HttpGet("doctor/{doctorId}")]
-    public async Task<ActionResult<List<AppointmentDto>>> GetListDoctor([FromQuery] string doctorId)
-    {
-        var query = new GetAppointmentDoctorQuery();
-        var result = await Mediator.Send(query);
         return Ok(result);
     }
 }
