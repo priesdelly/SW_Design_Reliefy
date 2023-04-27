@@ -105,7 +105,6 @@ public class UserController : ApiControllerBase
         };
     }
 
-    [AllowAnonymous]
     [HttpPost("CheckOtp")]
     public async Task<ActionResult<BaseModel>> CheckOtp([FromBody] CheckOtpRequest request)
     {
