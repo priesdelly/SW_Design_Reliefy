@@ -1,4 +1,3 @@
-using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +21,7 @@ public class UserController : ApiControllerBase
     {
         _context = context;
     }
-    
+
     [AllowAnonymous]
     [HttpPost("CreateUser")]
     public async Task<ActionResult<UserDto>> CreateUser(CreateUserCommand command)
@@ -56,6 +55,7 @@ public class UserController : ApiControllerBase
         return Ok(result);
     }
 
+    [AllowAnonymous]
     [HttpPost("SendOtp")]
     public async Task<ActionResult<BaseModel>> SendOtp([FromBody] SendOtpRequest request)
     {
@@ -71,7 +71,7 @@ public class UserController : ApiControllerBase
                 CreatedAt = DateTime.Now
             };
 
-            const string smtpServer = "sandbox.smtp.mailtrap.iน";
+            const string smtpServer = "sandbox.smtp.mailtrap.io";
             const int smtpPort = 2525;
             const string smtpUsername = "c835ef720ce075";
             const string smtpPassword = "e25e31c356e6c7";
@@ -106,17 +106,18 @@ public class UserController : ApiControllerBase
         };
     }
 
+    [AllowAnonymous]
     [HttpPost("CheckOtp")]
     public async Task<ActionResult<BaseModel>> CheckOtp([FromBody] CheckOtpRequest request)
     {
         var entity = await _context.TwoFactor.FirstOrDefaultAsync(x => x.Email == request.Email && x.Code == request.Code);
         if (entity == null)
-        { 
+        {
             return new BaseModel()
             {
                 Status = "error",
                 Message = "Email or code is not found"
-            }; 
+            };
         }
 
         if (entity.IsUsed)
@@ -125,7 +126,7 @@ public class UserController : ApiControllerBase
             {
                 Status = "error",
                 Message = "code already used"
-            };  
+            };
         }
 
         if (entity.ExpireAt >= DateTime.Now)
@@ -134,14 +135,13 @@ public class UserController : ApiControllerBase
             {
                 Status = "error",
                 Message = "code expired"
-            };  
-             
+            };
         }
-        
+
         entity.IsUsed = true;
         _context.Entry(entity).Property(x => x.IsUsed).IsModified = true;
         await _context.SaveChangesAsync();
-        
+
         return new BaseModel()
         {
             Status = "success",
