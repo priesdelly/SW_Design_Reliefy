@@ -13,5 +13,5 @@ public class AppointmentDto
 	public UserDto Patient { get; set; }
 	public string DoctorId { get; set; }
 	public UserDto Doctor { get; set; }
-	public float Score { get; set; }
+	public float? Score { get; set; }
 }

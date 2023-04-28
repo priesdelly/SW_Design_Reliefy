@@ -30,6 +30,13 @@ class _LayoutScreenState extends State<LayoutScreen> {
     });
   }
 
+  _LayoutScreenState() {
+    final index = Get.parameters["index"];
+    if (index != null) {
+      currentPageIndex = int.parse(index);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

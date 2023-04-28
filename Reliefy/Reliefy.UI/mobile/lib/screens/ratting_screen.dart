@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:mobile/components/button.dart';
 import 'package:mobile/providers/appointment_provider.dart';
+import 'package:mobile/utils/routes.dart';
 
 import '../utils/constant.dart';
 import '../utils/loader.dart';
@@ -24,7 +25,7 @@ class RattingScreen extends StatelessWidget {
       await _appointmentProvider.review(_appointmentId!, score);
     } finally {
       Loader.hide();
-      Get.back();
+      Get.offNamed(PageRoutes.home, parameters: {"index": "1"});
     }
   }
 

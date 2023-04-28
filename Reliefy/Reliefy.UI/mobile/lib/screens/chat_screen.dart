@@ -55,8 +55,13 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   init() async {
+    final user = await _userProvider.getUserInfo();
     _appointmentId = Get.parameters["appointmentId"]!;
-    _receiverId = Get.parameters["doctorId"]!;
+    if (user!.userRoles!.first.role!.name == "Doctor") {
+      _receiverId = Get.parameters["patientId"]!;
+    } else {
+      _receiverId = Get.parameters["doctorId"]!;
+    }
     _isLocked = Get.parameters["isLocked"];
     try {
       final chatSession = await _chatProvider.getSession(_appointmentId);
