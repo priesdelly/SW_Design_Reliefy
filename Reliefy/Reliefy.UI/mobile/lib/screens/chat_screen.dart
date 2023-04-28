@@ -6,6 +6,7 @@ import 'package:mobile/components/chat_item.dart';
 import 'package:mobile/models/chat.dart';
 import 'package:mobile/providers/chat_provider.dart';
 import 'package:mobile/providers/user_provider.dart';
+import 'package:mobile/utils/routes.dart';
 import '../components/textbox_input.dart';
 import '../models/user.dart';
 import '../utils/constant.dart';
@@ -44,6 +45,11 @@ class _ChatScreenState extends State<ChatScreen> {
         });
       }
     });
+    _chatProvider.hub.on("Complete", (arguments) {
+      if (arguments != null && arguments.isNotEmpty) {
+        Get.offAllNamed(PageRoutes.home);
+      }
+    });
     _userProvider.getUserInfo().then((value) => user = value!);
     super.initState();
   }
@@ -67,6 +73,10 @@ class _ChatScreenState extends State<ChatScreen> {
   void dispose() {
     _chatProvider.hub.stop();
     super.dispose();
+  }
+
+  void onComplete() async {
+    await _chatProvider.hub.invoke("CompleteAppontment", args: <Object>[_appointmentId]);
   }
 
   void onSend() async {
@@ -96,6 +106,11 @@ class _ChatScreenState extends State<ChatScreen> {
           padding: EdgeInsets.only(left: kPaddingContainer, right: kPaddingContainer),
           child: Text("Chat"),
         ),
+        actions: [
+          user.userRoles!.first.role!.name == 'Doctor'
+              ? TextButton(onPressed: onComplete, child: const Text("Complete"))
+              : const SizedBox(),
+        ],
         titleTextStyle: const TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.w600),
         centerTitle: false,
         elevation: 0,

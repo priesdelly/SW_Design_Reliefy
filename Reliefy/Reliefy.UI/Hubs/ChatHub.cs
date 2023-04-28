@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using Reliefy.Application.BL.Appointment.Commands;
 using Reliefy.Application.BL.Chat.Commands;
 using Reliefy.Application.BL.Chat.Queries;
 using Reliefy.Application.Interfaces;
@@ -43,6 +44,17 @@ public class ChatHub : Hub
 
 		Console.WriteLine(connect.UserId + " Connected with " + connect.ConnectionId);
 		return base.OnConnectedAsync();
+	}
+
+	public async Task CompleteAppontment(string appointmentId)
+	{
+		var command = new CompleteAppointmentCommand { AppointmentId = appointmentId };
+		var result = await _mediator.Send(command);
+		var connectionIds = _usersSession.Select(x => x.ConnectionId).ToList();
+		if (connectionIds.Count > 0)
+		{
+			await Clients.Clients(connectionIds).SendAsync("Complete", result);
+		}
 	}
 
 	public async Task SendMessage(CreateChatCommand command)

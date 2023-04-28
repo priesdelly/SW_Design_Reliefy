@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Mail;
 using MediatR;
+using Reliefy.Application.BL.Email.Commands;
 using Reliefy.Application.Interfaces;
 using Reliefy.Domain.Entities;
 
@@ -15,10 +16,12 @@ public record SendTwoFactorCommand : IRequest<ResponseMessage>
 public class SendTwoFactorCommandHandler : IRequestHandler<SendTwoFactorCommand, ResponseMessage>
 {
 	private readonly IApplicationDbContext _context;
+	private readonly IMediator _mediator;
 
-	public SendTwoFactorCommandHandler(IApplicationDbContext context)
+	public SendTwoFactorCommandHandler(IApplicationDbContext context, IMediator mediator)
 	{
 		_context = context;
+		_mediator = mediator;
 	}
 
 	public async Task<ResponseMessage> Handle(SendTwoFactorCommand request, CancellationToken cancellationToken)
@@ -35,26 +38,17 @@ public class SendTwoFactorCommandHandler : IRequestHandler<SendTwoFactorCommand,
 				CreatedAt = DateTime.Now
 			};
 
-			const string smtpServer = "sandbox.smtp.mailtrap.io";
-			const int smtpPort = 2525;
-			const string smtpUsername = "c835ef720ce075";
-			const string smtpPassword = "e25e31c356e6c7";
+			var sendMailCommand = new SendMailCommand
+			{
+				Email = twoFactor.Email,
+				Subject = "Verify your identity",
+				Body = $"Verification code: {twoFactor.Code}"
+			};
 
-			// Create the SMTP client object
-			var client = new SmtpClient(smtpServer, smtpPort);
-			client.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
-			client.EnableSsl = true;
-
-			var message = new MailMessage();
-			message.From = new MailAddress("noreply@reliefy.chat");
-			message.To.Add(new MailAddress(twoFactor.Email));
-			message.Subject = "Verify your identity";
-			message.Body = $"Verification code: {twoFactor.Code}";
-
-			client.Send(message);
+			await _mediator.Send(sendMailCommand, cancellationToken);
 
 			_context.TwoFactor.Add(twoFactor);
-			await _context.SaveChangesAsync();
+			await _context.SaveChangesAsync(cancellationToken);
 		}
 		catch (Exception ex)
 		{

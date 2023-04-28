@@ -16,6 +16,14 @@ class AppointmentItem extends StatelessWidget {
   final RxBool _isLoading = false.obs;
   AppointmentItem({super.key, required this.appointment, this.cancelCallback, this.user});
 
+  String getName() {
+    if (user != null && user!.userRoles!.first.role!.name == 'Doctor') {
+      return '${appointment.patient?.firstname} ${appointment.patient?.lastname}';
+    } else {
+      return '${appointment.doctor?.firstname} ${appointment.doctor?.lastname}';
+    }
+  }
+
   void cancel() async {
     try {
       final AppointmentProvider appointmentProvider = Get.find();
@@ -168,8 +176,7 @@ class AppointmentItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("${appointment.doctor?.firstname} ${appointment.doctor?.lastname}",
-                        style: const TextStyle(fontSize: 20)),
+                    Text(getName(), style: const TextStyle(fontSize: 20)),
                     Row(
                       children: [
                         Chip(

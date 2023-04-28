@@ -4,9 +4,11 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:mobile/components/appointment_item.dart';
 import 'package:mobile/providers/appointment_provider.dart';
+import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/utils/constant.dart';
 
 import '../models/appointment.dart';
+import '../models/user.dart';
 import '../utils/routes.dart';
 
 class AppointmentScreen extends StatefulWidget {
@@ -17,17 +19,24 @@ class AppointmentScreen extends StatefulWidget {
 }
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
-  final AppointmentProvider appointmentProvider = Get.find();
+  final AppointmentProvider _appointmentProvider = Get.find();
+  final UserProvider _userProvider = Get.find();
+  User? user;
 
   late Future<List<Appointment>> getList;
+  late Future<User?> getUser;
 
   _AppointmentScreenState() {
-    getList = appointmentProvider.getList();
+    getUser = _userProvider.getUserInfo();
+    getList = getUser.then((value) {
+      user = value;
+      return _appointmentProvider.getList();
+    });
   }
 
   void refresh() {
     setState(() {
-      getList = appointmentProvider.getList();
+      getList = _appointmentProvider.getList();
     });
   }
 
@@ -59,6 +68,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         itemBuilder: (_, index) => AppointmentItem(
                           appointment: snapshot.data!.elementAt(index),
                           cancelCallback: refresh,
+                          user: user,
                         ),
                       );
                     } else if (snapshot.hasError) {
@@ -74,31 +84,46 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     );
                   },
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: kBlueLight.withOpacity(0.4)), borderRadius: BorderRadius.circular(14)),
-                  height: 70,
-                  child: TextButton(
-                    onPressed: () => {},
-                    style: ButtonStyle(
-                      overlayColor: MaterialStateColor.resolveWith((_) => Colors.transparent),
-                    ),
-                    child: TextButton(
-                      onPressed: () => Get.toNamed(PageRoutes.createAppointment),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          FaIcon(FontAwesomeIcons.plus),
-                          SizedBox(width: 10),
-                          Text(
-                            "Make new appointment",
-                            style: TextStyle(fontSize: 16),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                FutureBuilder(
+                  future: getUser,
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData) {
+                      final user = snapshot.data;
+                      if (user!.userRoles!.first.role!.name == 'Patient') {
+                        return Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: kBlueLight.withOpacity(0.4)),
+                              borderRadius: BorderRadius.circular(14)),
+                          height: 70,
+                          child: TextButton(
+                            onPressed: () => {},
+                            style: ButtonStyle(
+                              overlayColor: MaterialStateColor.resolveWith((_) => Colors.transparent),
+                            ),
+                            child: TextButton(
+                              onPressed: () => Get.toNamed(PageRoutes.createAppointment),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  FaIcon(FontAwesomeIcons.plus),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    "Make new appointment",
+                                    style: TextStyle(fontSize: 16),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                )
               ],
             ),
           )
