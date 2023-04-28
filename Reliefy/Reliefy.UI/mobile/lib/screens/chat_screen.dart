@@ -27,7 +27,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late final String _appointmentId;
   late final String _chatSessionId;
   late final String _receiverId;
-  late User user;
+  User? user;
 
   List<Chat> _messages = [];
   bool _isLoading = true;
@@ -41,7 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (arguments != null && arguments.isNotEmpty) {
         final chat = Chat.fromJson(arguments.first as Map<String, dynamic>);
         setState(() {
-          _messages.add(chat);
+          _messages.insert(0, chat);
         });
       }
     });
@@ -50,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
         Get.offAllNamed(PageRoutes.home);
       }
     });
-    _userProvider.getUserInfo().then((value) => user = value!);
+
     super.initState();
   }
 
@@ -85,7 +85,7 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       _messageController.text = '';
     });
-    final request = Chat(message: message, chatSessionId: _chatSessionId, receiverId: _receiverId, senderId: user.id);
+    final request = Chat(message: message, chatSessionId: _chatSessionId, receiverId: _receiverId, senderId: user!.id);
     await _chatProvider.hub.invoke("SendMessage", args: <Object>[request]);
     _scrollController.animateTo(
       0.0,
@@ -96,74 +96,83 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const FaIcon(FontAwesomeIcons.chevronLeft, color: Colors.black),
-          onPressed: () => Get.back(),
-        ),
-        title: const Padding(
-          padding: EdgeInsets.only(left: kPaddingContainer, right: kPaddingContainer),
-          child: Text("Chat"),
-        ),
-        actions: [
-          user.userRoles!.first.role!.name == 'Doctor'
-              ? TextButton(onPressed: onComplete, child: const Text("Complete"))
-              : const SizedBox(),
-        ],
-        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.w600),
-        centerTitle: false,
-        elevation: 0,
-        backgroundColor: Colors.white,
-      ),
-      body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Column(
-          children: [
-            Expanded(
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.only(top: 10, bottom: 10),
-                      controller: _scrollController,
-                      reverse: true,
-                      itemCount: _messages.length,
-                      itemBuilder: (_, i) => ChatItem(
-                        content: _messages.elementAt(i).message ?? "",
-                        isOwner: _messages.elementAt(i).senderId == user.id,
+    return FutureBuilder(
+      future: _userProvider.getUserInfo().then((value) => user = value),
+      builder: (_, snapshot) {
+        if (snapshot.hasData) {
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const FaIcon(FontAwesomeIcons.chevronLeft, color: Colors.black),
+                onPressed: () => Get.back(),
+              ),
+              title: const Padding(
+                padding: EdgeInsets.only(left: kPaddingContainer, right: kPaddingContainer),
+                child: Text("Chat"),
+              ),
+              actions: [
+                user!.userRoles!.first.role!.name == 'Doctor'
+                    ? TextButton(onPressed: onComplete, child: const Text("Complete"))
+                    : const SizedBox(),
+              ],
+              titleTextStyle: const TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.w600),
+              centerTitle: false,
+              elevation: 0,
+              backgroundColor: Colors.white,
+            ),
+            body: GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: _isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : ListView.builder(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            controller: _scrollController,
+                            reverse: true,
+                            itemCount: _messages.length,
+                            itemBuilder: (_, i) => ChatItem(
+                              content: _messages.elementAt(i).message ?? "",
+                              isOwner: _messages.elementAt(i).senderId == user!.id,
+                            ),
+                          ),
+                  ),
+                  const SizedBox(height: 100)
+                ],
+              ),
+            ),
+            bottomSheet: _isLocked == null
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 40, left: 5, right: 5),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                                height: 50,
+                                child: TextboxInput(
+                                  controller: _messageController,
+                                  hintText: "Message...",
+                                )),
+                          ),
+                          IconButton(
+                            icon: const FaIcon(FontAwesomeIcons.paperPlane),
+                            onPressed: onSend,
+                          )
+                        ],
                       ),
                     ),
-            ),
-            const SizedBox(height: 100)
-          ],
-        ),
-      ),
-      bottomSheet: _isLocked == null
-          ? Padding(
-              padding: const EdgeInsets.only(bottom: 40, left: 5, right: 5),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                          height: 50,
-                          child: TextboxInput(
-                            controller: _messageController,
-                            hintText: "Message...",
-                          )),
-                    ),
-                    IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.paperPlane),
-                      onPressed: onSend,
-                    )
-                  ],
-                ),
-              ),
-            )
-          : const SizedBox(),
+                  )
+                : const SizedBox(),
+          );
+        } else {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+      },
     );
   }
 }

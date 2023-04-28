@@ -17,7 +17,7 @@ public class ChatHub : Hub
 	private readonly ICurrentUserService _currentUserService;
 	private readonly IMediator _mediator;
 
-	private readonly List<UserConnected> _usersSession = new();
+	private static List<UserConnected> _usersSession = new ();
 
 	public ChatHub(ICurrentUserService currentUserService, IMediator mediator)
 	{
@@ -27,7 +27,6 @@ public class ChatHub : Hub
 
 	public override Task OnConnectedAsync()
 	{
-		var context = Context.GetHttpContext();
 		var userConnected = _usersSession.Where(x => x.UserId == _currentUserService.UserId).ToList();
 		if (userConnected.Any())
 		{
@@ -50,7 +49,9 @@ public class ChatHub : Hub
 	{
 		var command = new CompleteAppointmentCommand { AppointmentId = appointmentId };
 		var result = await _mediator.Send(command);
-		var connectionIds = _usersSession.Select(x => x.ConnectionId).ToList();
+		var connectionIds = _usersSession
+			.Where(x => x.UserId == result.DoctorId || x.UserId == result.PatientId)
+			.Select(x => x.ConnectionId).ToList();
 		if (connectionIds.Count > 0)
 		{
 			await Clients.Clients(connectionIds).SendAsync("Complete", result);

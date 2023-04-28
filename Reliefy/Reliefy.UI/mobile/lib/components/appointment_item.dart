@@ -37,8 +37,8 @@ class AppointmentItem extends StatelessWidget {
 
   Widget buttonActionBuild() {
     if ((appointment.status == 2 || appointment.status == 3) &&
-        (appointment.startTime!.compareTo(DateTime.now().toUtc()) > 0 &&
-            appointment.endTime!.compareTo(DateTime.now().toUtc()) < 0)) {
+        (DateTime.now().toUtc().compareTo(appointment.startTime!) > 0 &&
+            DateTime.now().toUtc().compareTo(appointment.endTime!) < 0)) {
       return Button(
         onPressed: () => Get.toNamed(PageRoutes.chat, parameters: {
           "appointmentId": appointment.id!,
